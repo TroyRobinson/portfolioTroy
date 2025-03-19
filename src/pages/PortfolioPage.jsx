@@ -1,7 +1,6 @@
 import React from 'react';
 import { FlexCol, FlexRow } from '../utils.jsx';
 import { Tag } from '../components/Tag.jsx';
-import { init, i, id } from '@instantdb/core';
 
 // Simple spinner component
 const Spinner = () => (
@@ -433,7 +432,21 @@ const PortfolioPage = () => {
   React.useEffect(() => {
     const initializeDb = async () => {
       try {
-        console.log("Initializing InstantDB...");
+        console.log("Loading InstantDB from esm.sh...");
+        
+        // Import the modules using esm.sh
+        const instantdbModule = await import("https://esm.sh/@instantdb/core@0.17.31");
+        
+        if (!instantdbModule) {
+          throw new Error("Failed to load InstantDB module");
+        }
+        
+        console.log("InstantDB module loaded:", instantdbModule);
+        
+        // Extract the required functions
+        const { init, i, id } = instantdbModule;
+        
+        console.log("InstantDB loaded successfully, initializing app...");
 
         // Declare schema
         const schema = i.schema({
@@ -441,7 +454,7 @@ const PortfolioPage = () => {
             caseStudies: i.entity({
               name: i.string(),
               description: i.string(),
-              technologies: i.string(), // Comma-separated tags
+              technologies: i.string(),
               date: i.string(),
               createdAt: i.date(),
             }),
