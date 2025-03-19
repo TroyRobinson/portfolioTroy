@@ -1,31 +1,29 @@
 import React from 'react'
 
-export function FlexRow({ children, style, ...props }) {
+export const FlexCol = ({ children, style, ...props }) => {
   return (
     <div
-      {...props}
       style={{
-        position: 'relative',
         display: 'flex',
-        flexDirection: 'row',
-        ...style,
+        flexDirection: 'column',
+        ...style
       }}
+      {...props}
     >
       {children}
     </div>
   )
 }
 
-export function FlexCol({ children, style, ...props }) {
+export const FlexRow = ({ children, style, ...props }) => {
   return (
     <div
-      {...props}
       style={{
-        position: 'relative',
         display: 'flex',
-        flexDirection: 'column',
-        ...style,
+        flexDirection: 'row',
+        ...style
       }}
+      {...props}
     >
       {children}
     </div>

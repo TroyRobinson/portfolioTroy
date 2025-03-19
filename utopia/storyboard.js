@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Scene, Storyboard } from 'utopia-api'
 import { App } from '../src/app'
-import { App2 } from '../src/app2'
+import { Tag } from '../src/components/Tag'
 import { Playground } from '../src/playground'
 
 export var storyboard = (
@@ -35,8 +35,8 @@ export var storyboard = (
       <App />
     </Scene>
     <Scene
-      id='app2-scene'
-      commentId='app2-scene'
+      id='tag-scene'
+      commentId='tag-scene'
       style={{
         width: 700,
         height: 700,
@@ -44,9 +44,9 @@ export var storyboard = (
         left: 1808,
         top: 128,
       }}
-      data-label='App2'
+      data-label='Tag'
     >
-      <App2 style={{}} />
+      <Tag style={{}} />
     </Scene>
   </Storyboard>
 )
