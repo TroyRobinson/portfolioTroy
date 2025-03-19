@@ -203,14 +203,24 @@ export const App = () => {
     <FlexCol
       style={{
         width: '100%',
+        maxWidth: '1200px',
+        margin: '0 auto',
         height: '100%',
-        padding: '40px',
+        padding: '20px',
         fontFamily: 'sans-serif',
         backgroundColor: '#f9f9f9',
-        color: '#333'
+        color: '#333',
+        boxSizing: 'border-box',
+        overflowX: 'hidden'
       }}
     >
-      <FlexRow style={{ justifyContent: 'space-between', alignItems: 'center', padding: '0 0 20px 0' }}>
+      <FlexRow style={{ 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        padding: '0 0 20px 0',
+        flexWrap: 'wrap',
+        gap: '20px'
+      }}>
         <FlexCol>
           <h1 style={{ fontSize: '2.5rem', padding: '0 0 10px 0' }}>My Portfolio</h1>
           <p style={{ fontSize: '1.2rem', color: '#666' }}>Web Developer & Designer</p>
@@ -247,7 +257,12 @@ export const App = () => {
       <Separator.Root style={{ height: '1px', backgroundColor: '#e0e0e0', padding: '0', margin: '0 0 20px 0' }} />
       
       <Tabs.Root defaultValue="about">
-        <Tabs.List style={{ display: 'flex', padding: '0 0 20px 0' }}>
+        <Tabs.List style={{ 
+          display: 'flex', 
+          padding: '0 0 20px 0',
+          flexWrap: 'wrap',
+          gap: '5px'
+        }}>
           <Tabs.Trigger value="about" style={{ 
             backgroundColor: 'transparent',
             padding: '10px 20px',
