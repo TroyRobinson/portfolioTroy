@@ -1,9 +1,10 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { FlexRow } from '../utils.jsx';
-import { Link, useRouter } from '../Router.jsx';
 
 const Navigation = () => {
-  const { currentPath } = useRouter();
+  const location = useLocation();
+  const currentPath = location.pathname;
   
   return (
     <FlexRow style={{ 
