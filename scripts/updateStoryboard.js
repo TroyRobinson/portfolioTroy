@@ -20,8 +20,9 @@ const IGNORED_FILES = [
 
 // File patterns that should be included even if they match ignore patterns
 const FORCE_INCLUDE = [
-  // Add specific files to always include here if needed
-  // Example: 'SpecialComponent', 'ImportantUtil'
+  'Header', // Always include Header component
+  'Navigation', // Always include Navigation component
+  'App' // Always include App component
 ];
 
 // Scan for React components in a directory
@@ -164,33 +165,45 @@ function generateStoryboard(components, existingScenes = null) {
   // Add original positions for standard components if they don't exist yet
   const componentsToAdd = components.filter(component => !addedComponents.has(component.name));
   
-  // First add Playground and App if they exist and don't have scenes yet
+  // First add Header, Navigation, and App if they exist and don't have scenes yet
   componentsToAdd.forEach(component => {
     const sceneId = `${component.name.toLowerCase()}-scene`;
-    if (component.name === 'Playground' && !addedComponents.has('Playground')) {
+    if (component.name === 'Header' && !addedComponents.has('Header')) {
       sceneConfigurations[sceneId] = {
         width: 700,
-        height: 759,
+        height: 200,
         left: 212,
         top: defaultTop,
-        label: 'Playground',
+        label: 'Header',
         component
       };
-      addedComponents.add('Playground');
+      addedComponents.add('Header');
       usedPositions.add(212);
       furthestRightPosition = Math.max(furthestRightPosition, 212);
+    } else if (component.name === 'Navigation' && !addedComponents.has('Navigation')) {
+      sceneConfigurations[sceneId] = {
+        width: 700,
+        height: 100,
+        left: 992,
+        top: defaultTop,
+        label: 'Navigation',
+        component
+      };
+      addedComponents.add('Navigation');
+      usedPositions.add(992);
+      furthestRightPosition = Math.max(furthestRightPosition, 992);
     } else if (component.name === 'App' && !addedComponents.has('App')) {
       sceneConfigurations[sceneId] = {
         width: 744,
         height: 1133,
-        left: 992,
+        left: 1808,
         top: defaultTop,
         label: 'My App',
         component
       };
       addedComponents.add('App');
-      usedPositions.add(992);
-      furthestRightPosition = Math.max(furthestRightPosition, 992);
+      usedPositions.add(1808);
+      furthestRightPosition = Math.max(furthestRightPosition, 1808);
     }
   });
   

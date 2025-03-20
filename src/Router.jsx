@@ -1,7 +1,9 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
+import { FlexCol } from './utils.jsx';
+import Header from './components/Header.jsx';
 
 // Create a context to hold our routing state
-const RouterContext = createContext();
+const RouterContext = createContext({});
 
 export function RouterProvider({ children }) {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
@@ -28,7 +30,23 @@ export function RouterProvider({ children }) {
 
   return (
     <RouterContext.Provider value={{ currentPath, navigate }}>
-      {children}
+      <FlexCol
+        style={{
+          width: '100%',
+          maxWidth: '1200px',
+          margin: '0 auto',
+          height: '100%',
+          padding: '20px',
+          fontFamily: 'sans-serif',
+          backgroundColor: '#f9f9f9',
+          color: '#333',
+          boxSizing: 'border-box',
+          overflowX: 'hidden'
+        }}
+      >
+        <Header />
+        {children}
+      </FlexCol>
     </RouterContext.Provider>
   );
 }
@@ -58,14 +76,11 @@ export function Link({ to, children, ...props }) {
 export function Route({ path, component: Component }) {
   const { currentPath } = useRouter();
   
-  console.log(`Route checking: path=${path}, currentPath=${currentPath}`);
-  
   // Simple path matching (exact match or root path special case)
   const isMatch = currentPath === path || 
                   (path === '/' && (currentPath === '' || currentPath === '/'));
   
   if (isMatch) {
-    console.log(`Route matched: ${path}`);
     return <Component />;
   }
   
