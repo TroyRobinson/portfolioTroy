@@ -1,42 +1,32 @@
 import * as React from 'react'
 import { Scene, Storyboard } from 'utopia-api'
+import { RouterProvider } from '../src/Router'
+import { Link } from '../src/Router'
+import { Route } from '../src/Router'
+import { Routes } from '../src/Router'
 import { App } from '../src/app'
-import Header from '../src/components/Header'
-import Navigation from '../src/components/Navigation'
 import { Tag } from '../src/components/Tag'
-import AboutPage from '../src/pages/AboutPage'
-import ContactPage from '../src/pages/ContactPage'
-import PortfolioPage from '../src/pages/PortfolioPage'
+import { Playground } from '../src/playground'
+import { FlexCol } from '../src/utils'
+import { FlexRow } from '../src/utils'
+import { TwoColumnGrid } from '../src/utils'
+import { ThreeColumnGrid } from '../src/utils'
 
 export var storyboard = (
   <Storyboard>
     <Scene
-      id='header-scene'
-      commentId='header-scene'
+      id='playground-scene'
+      commentId='playground-scene'
       style={{
         width: 700,
-        height: 200,
+        height: 700,
         position: 'absolute',
         left: 212,
         top: 128,
       }}
-      data-label='Header'
+      data-label='Playground'
     >
-      <Header />
-    </Scene>
-    <Scene
-      id='navigation-scene'
-      commentId='navigation-scene'
-      style={{
-        width: 700,
-        height: 100,
-        position: 'absolute',
-        left: 992,
-        top: 128,
-      }}
-      data-label='Navigation'
-    >
-      <Navigation />
+      <Playground style={{}} />
     </Scene>
     <Scene
       id='app-scene'
@@ -45,54 +35,12 @@ export var storyboard = (
         width: 744,
         height: 1133,
         position: 'absolute',
-        left: 1808,
+        left: 992,
         top: 128,
       }}
       data-label='My App'
     >
       <App />
-    </Scene>
-    <Scene
-      id='aboutpage-scene'
-      commentId='aboutpage-scene'
-      style={{
-        width: 700,
-        height: 700,
-        position: 'absolute',
-        left: 212,
-        top: 944,
-      }}
-      data-label='About Page'
-    >
-      <AboutPage />
-    </Scene>
-    <Scene
-      id='contactpage-scene'
-      commentId='contactpage-scene'
-      style={{
-        width: 700,
-        height: 700,
-        position: 'absolute',
-        left: 992,
-        top: 944,
-      }}
-      data-label='Contact Page'
-    >
-      <ContactPage />
-    </Scene>
-    <Scene
-      id='portfoliopage-scene'
-      commentId='portfoliopage-scene'
-      style={{
-        width: 700,
-        height: 700,
-        position: 'absolute',
-        left: 1808,
-        top: 944,
-      }}
-      data-label='Portfolio Page'
-    >
-      <PortfolioPage />
     </Scene>
     <Scene
       id='tag-scene'
@@ -101,12 +49,124 @@ export var storyboard = (
         width: 700,
         height: 700,
         position: 'absolute',
-        left: 212,
+        left: 1808,
         top: 1760,
       }}
       data-label='Tag'
     >
-      <Tag>Example Tag</Tag>
+      <Tag style={{}} />
+    </Scene>
+    <Scene
+      id='routerprovider-scene'
+      commentId='routerprovider-scene'
+      style={{
+        width: 700,
+        height: 700,
+        position: 'absolute',
+        left: 2624,
+        top: 128,
+      }}
+      data-label='RouterProvider'
+    >
+      <RouterProvider />
+    </Scene>
+    <Scene
+      id='link-scene'
+      commentId='link-scene'
+      style={{
+        width: 700,
+        height: 700,
+        position: 'absolute',
+        left: 3440,
+        top: 128,
+      }}
+      data-label='Link'
+    >
+      <Link />
+    </Scene>
+    <Scene
+      id='route-scene'
+      commentId='route-scene'
+      style={{
+        width: 700,
+        height: 700,
+        position: 'absolute',
+        left: 4256,
+        top: 128,
+      }}
+      data-label='Route'
+    >
+      <Route />
+    </Scene>
+    <Scene
+      id='routes-scene'
+      commentId='routes-scene'
+      style={{
+        width: 700,
+        height: 700,
+        position: 'absolute',
+        left: 5072,
+        top: 128,
+      }}
+      data-label='Routes'
+    >
+      <Routes />
+    </Scene>
+    <Scene
+      id='flexcol-scene'
+      commentId='flexcol-scene'
+      style={{
+        width: 700,
+        height: 700,
+        position: 'absolute',
+        left: 5888,
+        top: 128,
+      }}
+      data-label='FlexCol'
+    >
+      <FlexCol style={{}} />
+    </Scene>
+    <Scene
+      id='flexrow-scene'
+      commentId='flexrow-scene'
+      style={{
+        width: 700,
+        height: 700,
+        position: 'absolute',
+        left: 6704,
+        top: 128,
+      }}
+      data-label='FlexRow'
+    >
+      <FlexRow style={{}} />
+    </Scene>
+    <Scene
+      id='twocolumngrid-scene'
+      commentId='twocolumngrid-scene'
+      style={{
+        width: 700,
+        height: 700,
+        position: 'absolute',
+        left: 7520,
+        top: 128,
+      }}
+      data-label='TwoColumnGrid'
+    >
+      <TwoColumnGrid />
+    </Scene>
+    <Scene
+      id='threecolumngrid-scene'
+      commentId='threecolumngrid-scene'
+      style={{
+        width: 700,
+        height: 700,
+        position: 'absolute',
+        left: 8336,
+        top: 128,
+      }}
+      data-label='ThreeColumnGrid'
+    >
+      <ThreeColumnGrid />
     </Scene>
   </Storyboard>
 )

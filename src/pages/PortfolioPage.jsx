@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlexCol, FlexRow } from '../utils.jsx';
-import { Tag } from '../components/Tag.jsx';
+import { Tag } from '../components/Tag';
+import BulkEditModal from '../components/BulkEditModal';
+import NewCaseStudyModal from '../components/NewCaseStudyModal';
 
 // Simple spinner component
 const Spinner = () => (
@@ -68,30 +70,76 @@ const generateUniqueId = (prefix = '') => {
 };
 
 const PortfolioPage = () => {
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState(null);
-  const [caseStudies, setCaseStudies] = React.useState([]);
-  const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [bulkEditOpen, setBulkEditOpen] = React.useState(false);
-  const [bulkEditJson, setBulkEditJson] = React.useState('');
-  const [jsonError, setJsonError] = React.useState(null);
-  const [db, setDb] = React.useState(null);
-  const [dummyDataLoaded, setDummyDataLoaded] = React.useState(false);
-  const [isClearing, setIsClearing] = React.useState(false);
-  const [status, setStatus] = React.useState('');
-  // Store app ID in state so we can generate a new one when resetting
-  const [appId, setAppId] = React.useState("4a592307-cbd2-44e0-8818-d863e9e95399");
-  
-  // Form state
-  const [newCaseStudy, setNewCaseStudy] = React.useState({
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [caseStudies, setCaseStudies] = useState([]);
+  const [isBulkEditOpen, setIsBulkEditOpen] = useState(false);
+  const [isNewCaseStudyOpen, setIsNewCaseStudyOpen] = useState(false);
+  const [jsonValue, setJsonValue] = useState('');
+  const [isClearing, setIsClearing] = useState(false);
+  const [jsonError, setJsonError] = useState('');
+  const [formData, setFormData] = useState({
     name: '',
     description: '',
     technologies: '',
-    date: ''
+    date: new Date().toISOString().split('T')[0]
   });
+  const [db, setDb] = useState(null);
+  const [dummyDataLoaded, setDummyDataLoaded] = useState(false);
+  const [status, setStatus] = useState('');
+  const [appId, setAppId] = useState("4a592307-cbd2-44e0-8818-d863e9e95399");
 
-  // Function to add sample data
-  const addSampleData = React.useCallback(async () => {
+  useEffect(() => {
+    // Load case studies from localStorage
+    const savedCaseStudies = localStorage.getItem('caseStudies');
+    if (savedCaseStudies) {
+      setCaseStudies(JSON.parse(savedCaseStudies));
+    }
+  }, []);
+
+  const handleJsonChange = (e) => {
+    setJsonValue(e.target.value);
+    setJsonError('');
+  };
+
+  const handleSave = () => {
+    try {
+      const newCaseStudies = JSON.parse(jsonValue);
+      setCaseStudies(newCaseStudies);
+      localStorage.setItem('caseStudies', jsonValue);
+      setIsBulkEditOpen(false);
+    } catch (error) {
+      setJsonError('Invalid JSON format');
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newCaseStudy = {
+      ...formData,
+      technologies: formData.technologies.split(',').map(tech => tech.trim()),
+      id: Date.now().toString()
+    };
+    setCaseStudies(prev => [...prev, newCaseStudy]);
+    localStorage.setItem('caseStudies', JSON.stringify([...caseStudies, newCaseStudy]));
+    setIsNewCaseStudyOpen(false);
+    setFormData({
+      name: '',
+      description: '',
+      technologies: '',
+      date: new Date().toISOString().split('T')[0]
+    });
+  };
+
+  const addSampleData = async () => {
     if (!db) {
       console.log("Cannot add sample data: Database not initialized");
       return false;
@@ -156,10 +204,9 @@ const PortfolioPage = () => {
     } finally {
       setIsClearing(false);
     }
-  }, [db]);
+  };
 
-  // Function to continuously delete all data until none remains
-  const deleteAllData = React.useCallback(async (loadSampleDataAfter = false) => {
+  const deleteAllData = async (loadSampleDataAfter = false) => {
     if (!db) {
       console.log("Cannot delete data: Database not initialized");
       return;
@@ -297,10 +344,9 @@ const PortfolioPage = () => {
         setStatus('');
       }, 8000);
     }
-  }, [db, addSampleData]);
+  };
 
-  // Function to completely reset the database with fresh sample data
-  const resetDatabase = React.useCallback(async () => {
+  const resetDatabase = async () => {
     try {
       setIsClearing(true);
       setError(null);
@@ -426,10 +472,10 @@ const PortfolioPage = () => {
         setStatus('');
       }, 8000);
     }
-  }, [dummyDataLoaded]);
+  };
 
   // Initialize InstantDB on first load
-  React.useEffect(() => {
+  useEffect(() => {
     const initializeDb = async () => {
       try {
         console.log("Loading InstantDB from esm.sh...");
@@ -500,217 +546,6 @@ const PortfolioPage = () => {
     initializeDb();
   }, [appId]);
 
-  // Case Studies operations
-  const addCaseStudy = () => {
-    if (!db) return;
-    
-    console.log("Adding case study:", newCaseStudy);
-    db.database.transact(
-      db.database.tx.caseStudies[db.id()].update({
-        name: newCaseStudy.name,
-        description: newCaseStudy.description,
-        technologies: newCaseStudy.technologies,
-        date: newCaseStudy.date,
-        createdAt: Date.now(),
-      })
-    );
-
-    // Reset form
-    setNewCaseStudy({
-      name: '',
-      description: '',
-      technologies: '',
-      date: ''
-    });
-    
-    // Close dialog
-    setDialogOpen(false);
-  };
-
-  const deleteCaseStudy = (caseStudy) => {
-    if (!db) return;
-    
-    console.log("Deleting case study:", caseStudy.id);
-    db.database.transact(db.database.tx.caseStudies[caseStudy.id].delete());
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewCaseStudy(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (newCaseStudy.name && newCaseStudy.technologies) {
-      addCaseStudy();
-    }
-  };
-
-  // Sort case studies by createdAt (newest first)
-  const sortedCaseStudies = [...caseStudies].sort((a, b) => {
-    // Use createdAt for sorting, with fallback to date if createdAt is missing
-    const timeA = a.createdAt || (a.date ? new Date(a.date).getTime() : 0);
-    const timeB = b.createdAt || (b.date ? new Date(b.date).getTime() : 0);
-    return timeA - timeB; // Sort in ascending order (oldest first) to match JSON order
-  });
-
-  // Function to open the bulk edit modal
-  const openBulkEdit = () => {
-    // Start with the sample data if no case studies exist
-    const dataToEdit = caseStudies.length > 0 
-      ? caseStudies.map(({ id, ...rest }) => rest) // Remove DB IDs
-      : SAMPLE_CASE_STUDIES;
-    
-    // Convert to formatted JSON string
-    const jsonString = JSON.stringify(dataToEdit, null, 2);
-    setBulkEditJson(jsonString);
-    setJsonError(null);
-    setBulkEditOpen(true);
-  };
-
-  // Function to validate the JSON input
-  const validateJson = (jsonString) => {
-    try {
-      const parsed = JSON.parse(jsonString);
-      
-      if (!Array.isArray(parsed)) {
-        return { valid: false, error: "JSON must be an array of case studies" };
-      }
-      
-      // Check if each item has the required fields
-      for (let i = 0; i < parsed.length; i++) {
-        const item = parsed[i];
-        if (!item.name) {
-          return { valid: false, error: `Item at index ${i} is missing the required 'name' field` };
-        }
-        if (!item.technologies) {
-          return { valid: false, error: `Item at index ${i} is missing the required 'technologies' field` };
-        }
-      }
-      
-      return { valid: true, data: parsed };
-    } catch (err) {
-      return { valid: false, error: `Invalid JSON: ${err.message}` };
-    }
-  };
-
-  // Function to sync the database with the edited JSON
-  const syncWithEditedJson = async (jsonString) => {
-    if (!db) {
-      setError("Database not initialized");
-      return false;
-    }
-    
-    // Validate the JSON
-    const validation = validateJson(jsonString);
-    if (!validation.valid) {
-      setJsonError(validation.error);
-      return false;
-    }
-    
-    setJsonError(null);
-    setIsClearing(true);
-    setStatus("Syncing database with edited JSON...");
-    
-    try {
-      // Delete all existing case studies
-      const deleteAll = async () => {
-        // Get all case studies
-        const allStudies = await new Promise(resolve => {
-          db.database.subscribeQuery({ caseStudies: {} }, (resp) => {
-            if (resp.data) {
-              resolve(resp.data.caseStudies || []);
-            } else {
-              resolve([]);
-            }
-          });
-        });
-        
-        if (allStudies.length > 0) {
-          setStatus(`Clearing ${allStudies.length} existing case studies...`);
-          
-          // Delete one at a time to avoid transaction validation issues
-          for (let i = 0; i < allStudies.length; i++) {
-            const study = allStudies[i];
-            try {
-              await db.database.transact(
-                db.database.tx.caseStudies[study.id].delete()
-              );
-              setStatus(`Deleted ${i + 1} of ${allStudies.length} case studies...`);
-            } catch (err) {
-              console.error(`Error deleting study ${study.id}:`, err);
-              // Continue with next study even if one fails
-            }
-            
-            // Reduced delay between deletes (from 100ms to 50ms)
-            await new Promise(resolve => setTimeout(resolve, 50));
-          }
-        }
-        
-        return true;
-      };
-      
-      // Delete all existing data
-      await deleteAll();
-      
-      // Add the new case studies from the JSON
-      const newStudies = validation.data;
-      setStatus(`Adding ${newStudies.length} case studies from edited JSON...`);
-      
-      // Process each study one at a time, exactly matching addCaseStudy's pattern
-      for (let i = 0; i < newStudies.length; i++) {
-        const study = newStudies[i];
-        
-        try {
-          // Use db.id() exactly as done in addCaseStudy
-          // Set createdAt to a timestamp that preserves the order from the JSON
-          // Using a base timestamp and adding the index to maintain order
-          const baseTimestamp = Date.now();
-          const orderPreservingTimestamp = baseTimestamp - (newStudies.length - i) * 1000;
-          
-          await db.database.transact(
-            db.database.tx.caseStudies[db.id()].update({
-              name: study.name,
-              description: study.description || '',
-              technologies: study.technologies,
-              date: study.date || new Date().toISOString().split('T')[0],
-              createdAt: orderPreservingTimestamp,
-            })
-          );
-          
-          setStatus(`Added ${i+1} of ${newStudies.length} case studies...`);
-        } catch (err) {
-          console.error(`Error adding study ${i+1}:`, err);
-          setError(`Error adding study ${i+1}: ${err.message}`);
-          
-          // Log more details about the study causing the error
-          console.error("Study data causing error:", study);
-        }
-        
-        // Reduced delay between adds (from 300ms to 100ms)
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
-      
-      setStatus("Database successfully synchronized with edited JSON!");
-      setTimeout(() => setStatus(''), 5000);
-      
-      return true;
-    } catch (err) {
-      console.error("Error syncing with edited JSON:", err);
-      setError(`Error syncing with edited JSON: ${err.message}`);
-      setStatus("Error occurred during database sync.");
-      setTimeout(() => setStatus(''), 5000);
-      
-      return false;
-    } finally {
-      setIsClearing(false);
-      setBulkEditOpen(false);
-    }
-  };
-
   return (
     <FlexCol style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
       <FlexRow style={{ justifyContent: 'space-between', alignItems: 'center', padding: '0 0 20px 0' }}>
@@ -741,7 +576,7 @@ const PortfolioPage = () => {
         <FlexRow style={{ gap: '10px' }}>
           {db && !loading && (
             <button
-              onClick={openBulkEdit}
+              onClick={() => setIsBulkEditOpen(true)}
               disabled={isClearing}
               title="Edit case studies as JSON"
               style={{
@@ -761,7 +596,7 @@ const PortfolioPage = () => {
           )}
         
         <button
-          onClick={() => setDialogOpen(true)}
+          onClick={() => setIsNewCaseStudyOpen(true)}
             disabled={isClearing || loading}
           style={{
             backgroundColor: '#2b6cb0',
@@ -793,238 +628,32 @@ const PortfolioPage = () => {
         </div>
       )}
       
-      {/* Bulk Edit Modal */}
-      {bulkEditOpen && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 1000
-        }}>
-          <div style={{
-            backgroundColor: 'white',
-            borderRadius: '6px',
-            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.12)',
-            width: '90%',
-            maxWidth: '800px',
-            padding: '20px',
-            maxHeight: '85vh',
-            overflowY: 'auto'
-          }}>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', padding: '0 0 10px 0' }}>
-              Edit Case Studies JSON
-            </h3>
-            
-            <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '10px' }}>
-              Edit the JSON directly to add, remove, or modify case studies. Each case study requires at minimum a 'name' and 'technologies' field.
-            </p>
-            
-            {jsonError && (
-              <div style={{ 
-                color: 'red', 
-                backgroundColor: '#ffeeee', 
-                padding: '10px', 
-                border: '1px solid #ffcccc',
-                borderRadius: '4px',
-                marginBottom: '10px',
-                fontSize: '0.9rem'
-              }}>
-                {jsonError}
-              </div>
-            )}
-            
-            <textarea
-              value={bulkEditJson}
-              onChange={(e) => setBulkEditJson(e.target.value)}
-              style={{
-                width: '100%',
-                height: '400px',
-                padding: '10px',
-                fontFamily: 'monospace',
-                fontSize: '14px',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-                resize: 'vertical'
-              }}
-            />
-            
-            <FlexRow style={{ justifyContent: 'flex-end', gap: '10px', padding: '15px 0 0 0' }}>
-              <button 
-                onClick={() => setBulkEditOpen(false)}
-                disabled={isClearing}
-                style={{
-                  padding: '10px 15px',
-                  backgroundColor: '#f3f4f6',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: isClearing ? 'not-allowed' : 'pointer',
-                  opacity: isClearing ? 0.7 : 1
-                }}
-              >
-                Cancel
-              </button>
-              
-              <button 
-                onClick={() => syncWithEditedJson(bulkEditJson)}
-                disabled={isClearing}
-                style={{
-                  padding: '10px 15px',
-                  backgroundColor: '#805ad5',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: isClearing ? 'not-allowed' : 'pointer',
-                  fontWeight: 'bold',
-                  opacity: isClearing ? 0.7 : 1
-                }}
-              >
-                {isClearing ? <><Spinner /> Syncing...</> : 'Save & Sync Database'}
-              </button>
-            </FlexRow>
-          </div>
-        </div>
-      )}
+      <BulkEditModal
+        isOpen={isBulkEditOpen}
+        onClose={() => setIsBulkEditOpen(false)}
+        jsonValue={jsonValue}
+        onJsonChange={handleJsonChange}
+        onSave={handleSave}
+        isClearing={isClearing}
+        jsonError={jsonError}
+      />
       
-      {dialogOpen && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 1000
-        }}>
-          <div style={{
-            backgroundColor: 'white',
-            borderRadius: '6px',
-            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.12)',
-            width: '90%',
-            maxWidth: '500px',
-            padding: '20px',
-            maxHeight: '85vh',
-            overflowY: 'auto'
-          }}>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', padding: '0 0 20px 0' }}>
-              New Case Study
-            </h3>
-            
-            <form onSubmit={handleSubmit}>
-              <FlexCol style={{ gap: '15px' }}>
-                <label style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                  <span style={{ fontWeight: 'bold' }}>Project Name</span>
-                  <input
-                    type="text"
-                    name="name"
-                    value={newCaseStudy.name}
-                    onChange={handleInputChange}
-                    required
-                    style={{
-                      padding: '10px',
-                      border: '1px solid #ddd',
-                      borderRadius: '4px'
-                    }}
-                  />
-                </label>
-                
-                <label style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                  <span style={{ fontWeight: 'bold' }}>Description</span>
-                  <textarea
-                    name="description"
-                    value={newCaseStudy.description}
-                    onChange={handleInputChange}
-                    rows={3}
-                    style={{
-                      padding: '10px',
-                      border: '1px solid #ddd',
-                      borderRadius: '4px',
-                      resize: 'vertical'
-                    }}
-                  />
-                </label>
-                
-                <label style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                  <span style={{ fontWeight: 'bold' }}>Technologies (comma separated)</span>
-                  <input
-                    type="text"
-                    name="technologies"
-                    value={newCaseStudy.technologies}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="React, Node.js, GraphQL"
-                    style={{
-                      padding: '10px',
-                      border: '1px solid #ddd',
-                      borderRadius: '4px'
-                    }}
-                  />
-                </label>
-                
-                <label style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                  <span style={{ fontWeight: 'bold' }}>Date</span>
-                  <input
-                    type="date"
-                    name="date"
-                    value={newCaseStudy.date}
-                    onChange={handleInputChange}
-                    style={{
-                      padding: '10px',
-                      border: '1px solid #ddd',
-                      borderRadius: '4px'
-                    }}
-                  />
-                </label>
-                
-                <FlexRow style={{ justifyContent: 'flex-end', gap: '10px', padding: '10px 0 0 0' }}>
-                  <button 
-                    type="button" 
-                    onClick={() => setDialogOpen(false)}
-                    style={{
-                      padding: '10px 15px',
-                      backgroundColor: '#f3f4f6',
-                      border: 'none',
-                      borderRadius: '4px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Cancel
-                  </button>
-                  
-                  <button type="submit" style={{
-                    padding: '10px 15px',
-                    backgroundColor: '#2b6cb0',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    fontWeight: 'bold'
-                  }}>
-                    Add Case Study
-                  </button>
-                </FlexRow>
-              </FlexCol>
-            </form>
-          </div>
-        </div>
-      )}
+      <NewCaseStudyModal
+        isOpen={isNewCaseStudyOpen}
+        onClose={() => setIsNewCaseStudyOpen(false)}
+        onSubmit={handleSubmit}
+        formData={formData}
+        onInputChange={handleInputChange}
+      />
       
-      {!loading && !error && sortedCaseStudies.length === 0 && (
+      {!loading && !error && caseStudies.length === 0 && (
         <div style={{ padding: '20px 0', color: '#666' }}>
           No case studies yet. Add your first one!
         </div>
       )}
       
       <FlexCol style={{ gap: '15px' }}>
-        {sortedCaseStudies.map(study => (
+        {caseStudies.map(study => (
           <div key={study.id} style={{ 
             border: '1px solid #eee',
             borderRadius: '8px',
@@ -1048,21 +677,6 @@ const PortfolioPage = () => {
                 ))}
               </FlexRow>
             </FlexCol>
-            
-            <button 
-              onClick={() => deleteCaseStudy(study)}
-              style={{
-                backgroundColor: '#f44336',
-                color: 'white',
-                padding: '5px 10px',
-                borderRadius: '4px',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '0.8rem'
-              }}
-            >
-              Delete
-            </button>
           </div>
         ))}
       </FlexCol>

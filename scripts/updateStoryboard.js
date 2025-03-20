@@ -22,7 +22,9 @@ const IGNORED_FILES = [
 const FORCE_INCLUDE = [
   'Header', // Always include Header component
   'Navigation', // Always include Navigation component
-  'App' // Always include App component
+  'App', // Always include App component
+  'BulkEditModal', // Include modal components
+  'NewCaseStudyModal'
 ];
 
 // Scan for React components in a directory
@@ -38,25 +40,12 @@ function scanForComponents(dir) {
       // Recursively scan subdirectories
       components.push(...scanForComponents(filePath));
     } else if (COMPONENT_EXTENSIONS.includes(path.extname(file))) {
-      // Check if this is an ignored file
-      const baseName = path.basename(file, path.extname(file));
-      const fullPath = path.relative(SRC_DIR, filePath);
-      
-      // Skip if the file matches any ignore pattern and doesn't match any force include pattern
-      if (
-        (IGNORED_FILES.some(pattern => baseName.toLowerCase().includes(pattern.toLowerCase())) || 
-         IGNORED_FILES.some(pattern => fullPath.toLowerCase().includes(pattern.toLowerCase()))) &&
-        !FORCE_INCLUDE.some(pattern => baseName.toLowerCase().includes(pattern.toLowerCase()))
-      ) {
-        console.log(`Skipping ignored file: ${file}`);
-        return;
-      }
-      
       // Read file content
       const content = fs.readFileSync(filePath, 'utf-8');
       
-      // Simple regex to detect exported React components
+      // Enhanced regex to detect both named and inline components
       const exportRegex = /export\s+(var|const|let|function|class)\s+(\w+)(?:\s*=\s*(?:\(([^)]*)\)|function\s*\(([^)]*)\))?)?/g;
+      const inlineComponentRegex = /const\s+(\w+)\s*=\s*\([^)]*\)\s*=>\s*\([^)]*\)\s*=>\s*{/g;
       let match;
       
       // Add more patterns for React component detection
@@ -75,29 +64,37 @@ function scanForComponents(dir) {
         );
       };
 
+      // Process exported components
       while ((match = exportRegex.exec(content)) !== null) {
         const componentName = match[2];
         
-        // Use the enhanced React component detection
         if (isReactComponent(content, componentName)) {
-          // Check if component accepts style prop
           const params = match[3] || match[4] || '';
-          
-          // Check for style prop in different forms:
-          // 1. Direct style param: ({ style }) or (style)
-          // 2. Destructured style: ({ style, otherProps })
-          // 3. Props object that might contain style: (props) or ({ ...props })
           const hasStyleProp = 
             params.includes('style') || 
             params.includes('props') || 
             params.includes('...') || 
-            params.match(/{\s*[^}]*\s*}/); // Destructuring pattern
+            params.match(/{\s*[^}]*\s*}/);
           
           components.push({
             name: componentName,
             path: path.relative(SRC_DIR, filePath).replace(/\\/g, '/'),
             fullPath: filePath,
             hasStyleProp
+          });
+        }
+      }
+
+      // Process inline components
+      while ((match = inlineComponentRegex.exec(content)) !== null) {
+        const componentName = match[1];
+        
+        if (isReactComponent(content, componentName)) {
+          components.push({
+            name: componentName,
+            path: path.relative(SRC_DIR, filePath).replace(/\\/g, '/'),
+            fullPath: filePath,
+            hasStyleProp: true // Inline components typically accept style props
           });
         }
       }
@@ -204,6 +201,30 @@ function generateStoryboard(components, existingScenes = null) {
       addedComponents.add('App');
       usedPositions.add(1808);
       furthestRightPosition = Math.max(furthestRightPosition, 1808);
+    } else if (component.name === 'BulkEditModal' && !addedComponents.has('BulkEditModal')) {
+      sceneConfigurations[sceneId] = {
+        width: 800,
+        height: 600,
+        left: 212,
+        top: 944,
+        label: 'Bulk Edit Modal',
+        component
+      };
+      addedComponents.add('BulkEditModal');
+      usedPositions.add(212);
+      furthestRightPosition = Math.max(furthestRightPosition, 212);
+    } else if (component.name === 'NewCaseStudyModal' && !addedComponents.has('NewCaseStudyModal')) {
+      sceneConfigurations[sceneId] = {
+        width: 500,
+        height: 600,
+        left: 992,
+        top: 944,
+        label: 'New Case Study Modal',
+        component
+      };
+      addedComponents.add('NewCaseStudyModal');
+      usedPositions.add(992);
+      furthestRightPosition = Math.max(furthestRightPosition, 992);
     }
   });
   
