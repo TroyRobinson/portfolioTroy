@@ -68,7 +68,7 @@ const generateUniqueId = (prefix = '') => {
   return `${prefix}${Math.random().toString(36).substring(2, 10)}-${Date.now().toString(36)}`;
 };
 
-const PortfolioPage = () => {
+const PortfolioPage = ({ style }) => {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
   const [caseStudies, setCaseStudies] = React.useState([]);
@@ -713,7 +713,7 @@ const PortfolioPage = () => {
   };
 
   return (
-    <PageLayout title="Case Studies" style={{}}>
+    <PageLayout title="Case Studies" style={{...style}}>
       <FlexCol style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
         <FlexRow style={{ justifyContent: 'space-between', alignItems: 'center', padding: '0 0 20px 0' }}>
           <FlexCol style={{ gap: '5px' }}>

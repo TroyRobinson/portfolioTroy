@@ -2,13 +2,14 @@ import React from 'react';
 import { FlexRow } from '../utils.jsx';
 import { Link, useRouter } from '../Router.jsx';
 
-const Navigation = () => {
+const Navigation = ({ style }) => {
   const { currentPath } = useRouter();
   
   return (
     <FlexRow style={{ 
       padding: '0 0 20px 0',
-      gap: '10px'
+      gap: '10px',
+      ...style
     }}>
       <Link
         to="/"

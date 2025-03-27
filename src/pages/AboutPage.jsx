@@ -5,9 +5,9 @@ import { Tag } from '../components/Tag.jsx';
 import Navigation from '../components/Navigation.jsx';
 import { PageLayout } from '../components/PageLayout.jsx';
 
-const AboutPage = () => {
+const AboutPage = ({ style }) => {
   return (
-    <PageLayout title="About Me" style={{}}>
+    <PageLayout title="About Me" style={{...style}}>
       <FlexCol style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
         <p style={{ lineHeight: '1.6', fontSize: '1.1rem', padding: '0 0 20px 0' }}>
           I'm a passionate web developer and designer with expertise in creating modern, responsive, and user-friendly websites and applications. With over 5 years of experience, I specialize in React, Node.js, and modern frontend development practices.

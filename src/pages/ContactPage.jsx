@@ -2,11 +2,11 @@ import React from 'react';
 import { FlexCol, FlexRow } from '../utils.jsx';
 import { PageLayout } from '../components/PageLayout.jsx';
 
-const ContactPage = () => {
+const ContactPage = ({ style }) => {
   const [showForm, setShowForm] = React.useState(false);
 
   return (
-    <PageLayout title="Contact Me" style={{}}>
+    <PageLayout title="Contact Me" style={{...style}}>
       <FlexCol style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
         <FlexCol style={{ gap: '15px', padding: '0 0 20px 0' }}>
           <FlexRow style={{ alignItems: 'center', gap: '10px' }}>

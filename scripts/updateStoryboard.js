@@ -56,7 +56,18 @@ function scanForComponents(dir) {
       
       // Simple regex to detect exported React components
       const exportRegex = /export\s+(var|const|let|function|class)\s+(\w+)(?:\s*=\s*(?:\(([^)]*)\)|function\s*\(([^)]*)\))?)?/g;
+      // Regex to detect default exports
+      const defaultExportRegex = /export\s+default\s+(\w+)/g;
+      // Regex to detect component declarations
+      const componentDeclarationRegex = /(var|const|let|function|class)\s+(\w+)(?:\s*=\s*(?:\(([^)]*)\)|function\s*\(([^)]*)\))?)?/g;
+      
       let match;
+      let defaultExportName = null;
+      
+      // Check for default exports first
+      while ((match = defaultExportRegex.exec(content)) !== null) {
+        defaultExportName = match[1];
+      }
       
       // Add more patterns for React component detection
       const isReactComponent = (content, componentName) => {
@@ -74,6 +85,7 @@ function scanForComponents(dir) {
         );
       };
 
+      // Process named exports
       while ((match = exportRegex.exec(content)) !== null) {
         const componentName = match[2];
         
@@ -100,6 +112,38 @@ function scanForComponents(dir) {
           });
         }
       }
+      
+      // Process default exports if they reference a named component
+      if (defaultExportName) {
+        // Reset componentDeclarationRegex to start from beginning
+        componentDeclarationRegex.lastIndex = 0;
+        
+        // Find the component declaration for the default export
+        while ((match = componentDeclarationRegex.exec(content)) !== null) {
+          const componentName = match[2];
+          
+          if (componentName === defaultExportName && isReactComponent(content, componentName)) {
+            // Check if component accepts style prop
+            const params = match[3] || match[4] || '';
+            
+            const hasStyleProp = 
+              params.includes('style') || 
+              params.includes('props') || 
+              params.includes('...') || 
+              params.match(/{\s*[^}]*\s*}/); // Destructuring pattern
+            
+            // Avoid duplicates if the component was already added via named export
+            if (!components.some(c => c.name === componentName)) {
+              components.push({
+                name: componentName,
+                path: path.relative(SRC_DIR, filePath).replace(/\\/g, '/'),
+                fullPath: filePath,
+                hasStyleProp
+              });
+            }
+          }
+        }
+      }
     }
   });
   
@@ -120,8 +164,17 @@ function generateStoryboard(components, existingScenes = null) {
       const fileExt = path.extname(importPath);
       const importPathWithoutExt = importPath.replace(fileExt, '');
       
+      // Read file content to check if it's a default export or named export
+      const filePath = path.join(SRC_DIR, importPath);
+      const content = fs.readFileSync(filePath, 'utf-8');
+      const isDefaultExport = content.includes(`export default ${component.name}`);
+      
       // Use relative path from utopia directory to src directory
-      imports += `import { ${component.name} } from '../src/${importPathWithoutExt}'\n`;
+      if (isDefaultExport) {
+        imports += `import ${component.name} from '../src/${importPathWithoutExt}'\n`;
+      } else {
+        imports += `import { ${component.name} } from '../src/${importPathWithoutExt}'\n`;
+      }
       importedComponents.add(component.name);
     }
   });
