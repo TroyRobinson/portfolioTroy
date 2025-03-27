@@ -3,7 +3,7 @@ import * as Avatar from '@radix-ui/react-avatar';
 import { FlexCol, FlexRow } from '../utils.jsx';
 import Navigation from './Navigation.jsx';
 
-const PageLayout = ({ children, title }) => {
+export const PageLayout = ({ children, title, style }) => {
   return (
     <FlexCol
       style={{
@@ -13,7 +13,8 @@ const PageLayout = ({ children, title }) => {
         minHeight: '100vh',
         padding: '20px',
         boxSizing: 'border-box',
-        overflowX: 'hidden'
+        overflowX: 'hidden',
+        ...style
       }}
     >
       <FlexRow style={{ 
@@ -65,6 +66,4 @@ const PageLayout = ({ children, title }) => {
       {children}
     </FlexCol>
   );
-};
-
-export default PageLayout; 
+}; 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { FlexCol, FlexRow } from '../utils.jsx';
 import { Tag } from '../components/Tag.jsx';
-import PageLayout from '../components/PageLayout.jsx';
+import { PageLayout } from '../components/PageLayout.jsx';
 
 // Simple spinner component
 const Spinner = () => (
@@ -713,7 +713,7 @@ const PortfolioPage = () => {
   };
 
   return (
-    <PageLayout title="Case Studies">
+    <PageLayout title="Case Studies" style={{}}>
       <FlexCol style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
         <FlexRow style={{ justifyContent: 'space-between', alignItems: 'center', padding: '0 0 20px 0' }}>
           <FlexCol style={{ gap: '5px' }}>

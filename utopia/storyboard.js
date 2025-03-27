@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Scene, Storyboard } from 'utopia-api'
 import { App } from '../src/app'
+import { PageLayout } from '../src/components/PageLayout'
 import { Tag } from '../src/components/Tag'
 import { Playground } from '../src/playground'
 
@@ -47,6 +48,20 @@ export var storyboard = (
       data-label='Tag'
     >
       <Tag style={{}} />
+    </Scene>
+    <Scene
+      id='pagelayout-scene'
+      commentId='pagelayout-scene'
+      style={{
+        width: 700,
+        height: 700,
+        position: 'absolute',
+        left: 2624,
+        top: 128,
+      }}
+      data-label='PageLayout'
+    >
+      <PageLayout style={{}} />
     </Scene>
   </Storyboard>
 )
