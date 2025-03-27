@@ -43,8 +43,8 @@ export var storyboard = (
       id='tag-scene'
       commentId='tag-scene'
       style={{
-        width: 700,
-        height: 700,
+        width: 110,
+        height: 44,
         position: 'absolute',
         left: 1808,
         top: 128,
@@ -58,10 +58,10 @@ export var storyboard = (
       commentId='pagelayout-scene'
       style={{
         width: 700,
-        height: 700,
+        height: 524,
         position: 'absolute',
-        left: 2624,
-        top: 128,
+        left: 1808,
+        top: 656,
       }}
       data-label='PageLayout'
     >
@@ -71,11 +71,11 @@ export var storyboard = (
       id='navigation-scene'
       commentId='navigation-scene'
       style={{
-        width: 700,
-        height: 700,
+        width: 781,
+        height: 103,
         position: 'absolute',
-        left: 3440,
-        top: 128,
+        left: 1808,
+        top: 374,
       }}
       data-label='Navigation'
     >
@@ -86,9 +86,9 @@ export var storyboard = (
       commentId='aboutpage-scene'
       style={{
         width: 700,
-        height: 700,
+        height: 1188,
         position: 'absolute',
-        left: 4256,
+        left: 2696,
         top: 128,
       }}
       data-label='AboutPage'
@@ -100,9 +100,9 @@ export var storyboard = (
       commentId='contactpage-scene'
       style={{
         width: 700,
-        height: 700,
+        height: 1168,
         position: 'absolute',
-        left: 5072,
+        left: 3552,
         top: 128,
       }}
       data-label='ContactPage'
@@ -114,9 +114,9 @@ export var storyboard = (
       commentId='portfoliopage-scene'
       style={{
         width: 700,
-        height: 700,
+        height: 1956,
         position: 'absolute',
-        left: 5888,
+        left: 4400,
         top: 128,
       }}
       data-label='PortfolioPage'
