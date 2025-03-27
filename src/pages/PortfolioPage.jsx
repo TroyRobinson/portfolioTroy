@@ -1,6 +1,7 @@
 import React from 'react';
 import { FlexCol, FlexRow } from '../utils.jsx';
 import { Tag } from '../components/Tag.jsx';
+import PageLayout from '../components/PageLayout.jsx';
 
 // Simple spinner component
 const Spinner = () => (
@@ -712,361 +713,362 @@ const PortfolioPage = () => {
   };
 
   return (
-    <FlexCol style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-      <FlexRow style={{ justifyContent: 'space-between', alignItems: 'center', padding: '0 0 20px 0' }}>
-        <FlexCol style={{ gap: '5px' }}>
-        <h2 style={{ fontSize: '1.8rem', padding: '0' }}>Case Studies</h2>
+    <PageLayout title="Case Studies">
+      <FlexCol style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+        <FlexRow style={{ justifyContent: 'space-between', alignItems: 'center', padding: '0 0 20px 0' }}>
+          <FlexCol style={{ gap: '5px' }}>
           <div style={{ fontSize: '0.9rem', color: '#666' }}>
             {loading 
               ? <><Spinner /> Loading...</>
               : `${caseStudies.length} case studies loaded`}
           </div>
-          {status && (
-            <div style={{ 
-              fontSize: '0.9rem', 
-              color: '#4a5568', 
-              backgroundColor: '#edf2f7', 
-              padding: '5px 10px',
-              borderRadius: '4px',
-              marginTop: '5px',
-              display: 'flex',
-              alignItems: 'center'
-            }}>
-              {isClearing && <Spinner />}
-              <span>{status}</span>
-            </div>
-          )}
-        </FlexCol>
-        
-        <FlexRow style={{ gap: '10px' }}>
-          {db && !loading && (
-            <button
-              onClick={openBulkEdit}
-              disabled={isClearing}
-              title="Edit case studies as JSON"
-              style={{
-                backgroundColor: '#805ad5',
-                color: 'white',
-                padding: '10px 15px',
-                borderRadius: '4px',
-                border: 'none',
-                cursor: isClearing ? 'not-allowed' : 'pointer',
-                fontWeight: 'bold',
-                fontSize: '0.9rem',
-                opacity: isClearing ? 0.7 : 1
-              }}
-            >
-              {isClearing ? <><Spinner /> Processing...</> : '📝 Edit Bulk Data'}
-            </button>
-          )}
-        
-        <button
-          onClick={() => setDialogOpen(true)}
-            disabled={isClearing || loading}
-          style={{
-            backgroundColor: '#2b6cb0',
-            color: 'white',
-            padding: '10px 15px',
-            borderRadius: '4px',
-            border: 'none',
-              cursor: (isClearing || loading) ? 'not-allowed' : 'pointer',
-            fontWeight: 'bold',
-              fontSize: '0.9rem',
-              opacity: (isClearing || loading) ? 0.7 : 1
-          }}
-        >
-          Add New Case Study
-        </button>
-      </FlexRow>
-      </FlexRow>
-      
-      {error && (
-        <div style={{ 
-          color: 'red', 
-          backgroundColor: '#ffeeee', 
-          padding: '10px', 
-          border: '1px solid #ffcccc',
-          borderRadius: '4px',
-          marginBottom: '15px'
-        }}>
-          Error: {error}
-        </div>
-      )}
-      
-      {/* Bulk Edit Modal */}
-      {bulkEditOpen && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 1000
-        }}>
-          <div style={{
-            backgroundColor: 'white',
-            borderRadius: '6px',
-            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.12)',
-            width: '90%',
-            maxWidth: '800px',
-            padding: '20px',
-            maxHeight: '85vh',
-            overflowY: 'auto'
-          }}>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', padding: '0 0 10px 0' }}>
-              Edit Case Studies JSON
-            </h3>
-            
-            <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '10px' }}>
-              Edit the JSON directly to add, remove, or modify case studies. Each case study requires at minimum a 'name' and 'technologies' field.
-            </p>
-            
-            {jsonError && (
+            {status && (
               <div style={{ 
-                color: 'red', 
-                backgroundColor: '#ffeeee', 
-                padding: '10px', 
-                border: '1px solid #ffcccc',
+                fontSize: '0.9rem', 
+                color: '#4a5568', 
+                backgroundColor: '#edf2f7', 
+                padding: '5px 10px',
                 borderRadius: '4px',
-                marginBottom: '10px',
-                fontSize: '0.9rem'
+                marginTop: '5px',
+                display: 'flex',
+                alignItems: 'center'
               }}>
-                {jsonError}
+                {isClearing && <Spinner />}
+                <span>{status}</span>
               </div>
             )}
-            
-            <textarea
-              value={bulkEditJson}
-              onChange={(e) => setBulkEditJson(e.target.value)}
-              style={{
-                width: '100%',
-                height: '400px',
-                padding: '10px',
-                fontFamily: 'monospace',
-                fontSize: '14px',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-                resize: 'vertical'
-              }}
-            />
-            
-            <FlexRow style={{ justifyContent: 'flex-end', gap: '10px', padding: '15px 0 0 0' }}>
-              <button 
-                onClick={() => setBulkEditOpen(false)}
+          </FlexCol>
+          
+          <FlexRow style={{ gap: '10px' }}>
+            {db && !loading && (
+              <button
+                onClick={openBulkEdit}
                 disabled={isClearing}
+                title="Edit case studies as JSON"
                 style={{
-                  padding: '10px 15px',
-                  backgroundColor: '#f3f4f6',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: isClearing ? 'not-allowed' : 'pointer',
-                  opacity: isClearing ? 0.7 : 1
-                }}
-              >
-                Cancel
-              </button>
-              
-              <button 
-                onClick={() => syncWithEditedJson(bulkEditJson)}
-                disabled={isClearing}
-                style={{
-                  padding: '10px 15px',
                   backgroundColor: '#805ad5',
                   color: 'white',
-                  border: 'none',
+                  padding: '10px 15px',
                   borderRadius: '4px',
+                  border: 'none',
                   cursor: isClearing ? 'not-allowed' : 'pointer',
                   fontWeight: 'bold',
+                  fontSize: '0.9rem',
                   opacity: isClearing ? 0.7 : 1
                 }}
               >
-                {isClearing ? <><Spinner /> Syncing...</> : 'Save & Sync Database'}
+                {isClearing ? <><Spinner /> Processing...</> : '📝 Edit Bulk Data'}
               </button>
-            </FlexRow>
-          </div>
-        </div>
-      )}
-      
-      {dialogOpen && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 1000
-        }}>
-          <div style={{
-            backgroundColor: 'white',
-            borderRadius: '6px',
-            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.12)',
-            width: '90%',
-            maxWidth: '500px',
-            padding: '20px',
-            maxHeight: '85vh',
-            overflowY: 'auto'
+            )}
+          
+          <button
+            onClick={() => setDialogOpen(true)}
+              disabled={isClearing || loading}
+            style={{
+              backgroundColor: '#2b6cb0',
+              color: 'white',
+              padding: '10px 15px',
+              borderRadius: '4px',
+              border: 'none',
+                cursor: (isClearing || loading) ? 'not-allowed' : 'pointer',
+              fontWeight: 'bold',
+                fontSize: '0.9rem',
+                opacity: (isClearing || loading) ? 0.7 : 1
+            }}
+          >
+            Add New Case Study
+          </button>
+        </FlexRow>
+        </FlexRow>
+        
+        {error && (
+          <div style={{ 
+            color: 'red', 
+            backgroundColor: '#ffeeee', 
+            padding: '10px', 
+            border: '1px solid #ffcccc',
+            borderRadius: '4px',
+            marginBottom: '15px'
           }}>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', padding: '0 0 20px 0' }}>
-              New Case Study
-            </h3>
-            
-            <form onSubmit={handleSubmit}>
-              <FlexCol style={{ gap: '15px' }}>
-                <label style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                  <span style={{ fontWeight: 'bold' }}>Project Name</span>
-                  <input
-                    type="text"
-                    name="name"
-                    value={newCaseStudy.name}
-                    onChange={handleInputChange}
-                    required
-                    style={{
-                      padding: '10px',
-                      border: '1px solid #ddd',
-                      borderRadius: '4px'
-                    }}
-                  />
-                </label>
-                
-                <label style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                  <span style={{ fontWeight: 'bold' }}>Description</span>
-                  <textarea
-                    name="description"
-                    value={newCaseStudy.description}
-                    onChange={handleInputChange}
-                    rows={3}
-                    style={{
-                      padding: '10px',
-                      border: '1px solid #ddd',
-                      borderRadius: '4px',
-                      resize: 'vertical'
-                    }}
-                  />
-                </label>
-                
-                <label style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                  <span style={{ fontWeight: 'bold' }}>Technologies (comma separated)</span>
-                  <input
-                    type="text"
-                    name="technologies"
-                    value={newCaseStudy.technologies}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="React, Node.js, GraphQL"
-                    style={{
-                      padding: '10px',
-                      border: '1px solid #ddd',
-                      borderRadius: '4px'
-                    }}
-                  />
-                </label>
-                
-                <label style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                  <span style={{ fontWeight: 'bold' }}>Date</span>
-                  <input
-                    type="date"
-                    name="date"
-                    value={newCaseStudy.date}
-                    onChange={handleInputChange}
-                    style={{
-                      padding: '10px',
-                      border: '1px solid #ddd',
-                      borderRadius: '4px'
-                    }}
-                  />
-                </label>
-                
-                <FlexRow style={{ justifyContent: 'flex-end', gap: '10px', padding: '10px 0 0 0' }}>
-                  <button 
-                    type="button" 
-                    onClick={() => setDialogOpen(false)}
-                    style={{
-                      padding: '10px 15px',
-                      backgroundColor: '#f3f4f6',
-                      border: 'none',
-                      borderRadius: '4px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Cancel
-                  </button>
-                  
-                  <button type="submit" style={{
+            Error: {error}
+          </div>
+        )}
+        
+        {/* Bulk Edit Modal */}
+        {bulkEditOpen && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000
+          }}>
+            <div style={{
+              backgroundColor: 'white',
+              borderRadius: '6px',
+              boxShadow: '0 2px 10px rgba(0, 0, 0, 0.12)',
+              width: '90%',
+              maxWidth: '800px',
+              padding: '20px',
+              maxHeight: '85vh',
+              overflowY: 'auto'
+            }}>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', padding: '0 0 10px 0' }}>
+                Edit Case Studies JSON
+              </h3>
+              
+              <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '10px' }}>
+                Edit the JSON directly to add, remove, or modify case studies. Each case study requires at minimum a 'name' and 'technologies' field.
+              </p>
+              
+              {jsonError && (
+                <div style={{ 
+                  color: 'red', 
+                  backgroundColor: '#ffeeee', 
+                  padding: '10px', 
+                  border: '1px solid #ffcccc',
+                  borderRadius: '4px',
+                  marginBottom: '10px',
+                  fontSize: '0.9rem'
+                }}>
+                  {jsonError}
+                </div>
+              )}
+              
+              <textarea
+                value={bulkEditJson}
+                onChange={(e) => setBulkEditJson(e.target.value)}
+                style={{
+                  width: '100%',
+                  height: '400px',
+                  padding: '10px',
+                  fontFamily: 'monospace',
+                  fontSize: '14px',
+                  border: '1px solid #ddd',
+                  borderRadius: '4px',
+                  resize: 'vertical'
+                }}
+              />
+              
+              <FlexRow style={{ justifyContent: 'flex-end', gap: '10px', padding: '15px 0 0 0' }}>
+                <button 
+                  onClick={() => setBulkEditOpen(false)}
+                  disabled={isClearing}
+                  style={{
                     padding: '10px 15px',
-                    backgroundColor: '#2b6cb0',
+                    backgroundColor: '#f3f4f6',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: isClearing ? 'not-allowed' : 'pointer',
+                    opacity: isClearing ? 0.7 : 1
+                  }}
+                >
+                  Cancel
+                </button>
+                
+                <button 
+                  onClick={() => syncWithEditedJson(bulkEditJson)}
+                  disabled={isClearing}
+                  style={{
+                    padding: '10px 15px',
+                    backgroundColor: '#805ad5',
                     color: 'white',
                     border: 'none',
                     borderRadius: '4px',
-                    cursor: 'pointer',
-                    fontWeight: 'bold'
-                  }}>
-                    Add Case Study
-                  </button>
+                    cursor: isClearing ? 'not-allowed' : 'pointer',
+                    fontWeight: 'bold',
+                    opacity: isClearing ? 0.7 : 1
+                  }}
+                >
+                  {isClearing ? <><Spinner /> Syncing...</> : 'Save & Sync Database'}
+                </button>
+              </FlexRow>
+            </div>
+          </div>
+        )}
+        
+        {dialogOpen && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000
+          }}>
+            <div style={{
+              backgroundColor: 'white',
+              borderRadius: '6px',
+              boxShadow: '0 2px 10px rgba(0, 0, 0, 0.12)',
+              width: '90%',
+              maxWidth: '500px',
+              padding: '20px',
+              maxHeight: '85vh',
+              overflowY: 'auto'
+            }}>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', padding: '0 0 20px 0' }}>
+                New Case Study
+              </h3>
+              
+              <form onSubmit={handleSubmit}>
+                <FlexCol style={{ gap: '15px' }}>
+                  <label style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                    <span style={{ fontWeight: 'bold' }}>Project Name</span>
+                    <input
+                      type="text"
+                      name="name"
+                      value={newCaseStudy.name}
+                      onChange={handleInputChange}
+                      required
+                      style={{
+                        padding: '10px',
+                        border: '1px solid #ddd',
+                        borderRadius: '4px'
+                      }}
+                    />
+                  </label>
+                  
+                  <label style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                    <span style={{ fontWeight: 'bold' }}>Description</span>
+                    <textarea
+                      name="description"
+                      value={newCaseStudy.description}
+                      onChange={handleInputChange}
+                      rows={3}
+                      style={{
+                        padding: '10px',
+                        border: '1px solid #ddd',
+                        borderRadius: '4px',
+                        resize: 'vertical'
+                      }}
+                    />
+                  </label>
+                  
+                  <label style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                    <span style={{ fontWeight: 'bold' }}>Technologies (comma separated)</span>
+                    <input
+                      type="text"
+                      name="technologies"
+                      value={newCaseStudy.technologies}
+                      onChange={handleInputChange}
+                      required
+                      placeholder="React, Node.js, GraphQL"
+                      style={{
+                        padding: '10px',
+                        border: '1px solid #ddd',
+                        borderRadius: '4px'
+                      }}
+                    />
+                  </label>
+                  
+                  <label style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                    <span style={{ fontWeight: 'bold' }}>Date</span>
+                    <input
+                      type="date"
+                      name="date"
+                      value={newCaseStudy.date}
+                      onChange={handleInputChange}
+                      style={{
+                        padding: '10px',
+                        border: '1px solid #ddd',
+                        borderRadius: '4px'
+                      }}
+                    />
+                  </label>
+                  
+                  <FlexRow style={{ justifyContent: 'flex-end', gap: '10px', padding: '10px 0 0 0' }}>
+                    <button 
+                      type="button" 
+                      onClick={() => setDialogOpen(false)}
+                      style={{
+                        padding: '10px 15px',
+                        backgroundColor: '#f3f4f6',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Cancel
+                    </button>
+                    
+                    <button type="submit" style={{
+                      padding: '10px 15px',
+                      backgroundColor: '#2b6cb0',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      fontWeight: 'bold'
+                    }}>
+                      Add Case Study
+                    </button>
+                  </FlexRow>
+                </FlexCol>
+              </form>
+            </div>
+          </div>
+        )}
+        
+        {!loading && !error && sortedCaseStudies.length === 0 && (
+          <div style={{ padding: '20px 0', color: '#666' }}>
+            No case studies yet. Add your first one!
+          </div>
+        )}
+        
+        <FlexCol style={{ gap: '15px' }}>
+          {sortedCaseStudies.map(study => (
+            <div key={study.id} style={{ 
+              border: '1px solid #eee',
+              borderRadius: '8px',
+              padding: '20px',
+              backgroundColor: '#fafafa'
+            }}>
+              <FlexRow style={{ justifyContent: 'space-between', alignItems: 'flex-start', padding: '0 0 10px 0' }}>
+                <h3 style={{ fontSize: '1.3rem', padding: '0' }}>{study.name}</h3>
+                <span style={{ color: '#666', fontSize: '0.9rem' }}>{study.date}</span>
+              </FlexRow>
+              
+              {study.description && (
+                <p style={{ padding: '0 0 15px 0', lineHeight: '1.5' }}>{study.description}</p>
+              )}
+              
+              <FlexCol style={{ padding: '0 0 15px 0' }}>
+                <h4 style={{ fontSize: '0.9rem', color: '#666', padding: '0 0 8px 0' }}>Technologies</h4>
+                <FlexRow style={{ flexWrap: 'wrap', gap: '5px' }}>
+                  {study.technologies.split(',').map((tech, index) => (
+                    <Tag key={index}>{tech.trim()}</Tag>
+                  ))}
                 </FlexRow>
               </FlexCol>
-            </form>
-          </div>
-        </div>
-      )}
-      
-      {!loading && !error && sortedCaseStudies.length === 0 && (
-        <div style={{ padding: '20px 0', color: '#666' }}>
-          No case studies yet. Add your first one!
-        </div>
-      )}
-      
-      <FlexCol style={{ gap: '15px' }}>
-        {sortedCaseStudies.map(study => (
-          <div key={study.id} style={{ 
-            border: '1px solid #eee',
-            borderRadius: '8px',
-            padding: '20px',
-            backgroundColor: '#fafafa'
-          }}>
-            <FlexRow style={{ justifyContent: 'space-between', alignItems: 'flex-start', padding: '0 0 10px 0' }}>
-              <h3 style={{ fontSize: '1.3rem', padding: '0' }}>{study.name}</h3>
-              <span style={{ color: '#666', fontSize: '0.9rem' }}>{study.date}</span>
-            </FlexRow>
-            
-            {study.description && (
-              <p style={{ padding: '0 0 15px 0', lineHeight: '1.5' }}>{study.description}</p>
-            )}
-            
-            <FlexCol style={{ padding: '0 0 15px 0' }}>
-              <h4 style={{ fontSize: '0.9rem', color: '#666', padding: '0 0 8px 0' }}>Technologies</h4>
-              <FlexRow style={{ flexWrap: 'wrap', gap: '5px' }}>
-                {study.technologies.split(',').map((tech, index) => (
-                  <Tag key={index}>{tech.trim()}</Tag>
-                ))}
-              </FlexRow>
-            </FlexCol>
-            
-            <button 
-              onClick={() => deleteCaseStudy(study)}
-              style={{
-                backgroundColor: '#f44336',
-                color: 'white',
-                padding: '5px 10px',
-                borderRadius: '4px',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '0.8rem'
-              }}
-            >
-              Delete
-            </button>
-          </div>
-        ))}
+              
+              <button 
+                onClick={() => deleteCaseStudy(study)}
+                style={{
+                  backgroundColor: '#f44336',
+                  color: 'white',
+                  padding: '5px 10px',
+                  borderRadius: '4px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '0.8rem'
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          ))}
+        </FlexCol>
       </FlexCol>
-    </FlexCol>
+    </PageLayout>
   );
 };
 

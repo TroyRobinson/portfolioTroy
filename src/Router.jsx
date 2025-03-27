@@ -1,7 +1,10 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 
 // Create a context to hold our routing state
-const RouterContext = createContext();
+const RouterContext = createContext({
+  currentPath: '/',
+  navigate: () => {},
+});
 
 export function RouterProvider({ children }) {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
