@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { RouterProvider, Routes, Route, useRouter } from './Router.jsx';
+import { Router, Route, Switch } from './Router.jsx';
 import AboutPage from './pages/AboutPage.jsx';
 import PortfolioPage from './pages/PortfolioPage.jsx';
 import ContactPage from './pages/ContactPage.jsx';
+import CaseStudyDetail from './pages/CaseStudyDetail.jsx';
 
 // Main App component
 export const App = () => {
@@ -58,20 +59,23 @@ export const App = () => {
   }, []);
 
   return (
-    <RouterProvider>
+    <Router>
       <AppContent />
-    </RouterProvider>
+    </Router>
   );
 };
 
 // Separate component for the app content to use the router context
 const AppContent = () => {
   return (
-    <Routes>
+    <Switch>
       <Route path="/" component={AboutPage} />
       <Route path="/portfolio" component={PortfolioPage} />
+      <Route path="/portfolio/:slug">
+        {params => <CaseStudyDetail slug={params.slug} />}
+      </Route>
       <Route path="/contact" component={ContactPage} />
-    </Routes>
+    </Switch>
   );
 };
 

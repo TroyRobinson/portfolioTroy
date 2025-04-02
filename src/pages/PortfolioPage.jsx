@@ -2,6 +2,7 @@ import React from 'react';
 import { FlexCol, FlexRow } from '../utils.jsx';
 import { Tag } from '../components/Tag.jsx';
 import { PageLayout } from '../components/PageLayout.jsx';
+import { Link } from '../Router.jsx';
 
 // Simple spinner component
 const Spinner = () => (
@@ -1050,20 +1051,38 @@ const PortfolioPage = ({ style }) => {
                 </FlexRow>
               </FlexCol>
               
-              <button 
-                onClick={() => deleteCaseStudy(study)}
-                style={{
-                  backgroundColor: '#f44336',
-                  color: 'white',
-                  padding: '5px 10px',
-                  borderRadius: '4px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontSize: '0.8rem'
-                }}
-              >
-                Delete
-              </button>
+              <FlexRow style={{ gap: '10px' }}>
+                <Link href={`/portfolio/${study.name.toLowerCase().replace(/\s+/g, '-')}`} 
+                  style={{
+                    backgroundColor: '#2b6cb0',
+                    color: 'white',
+                    padding: '5px 10px',
+                    borderRadius: '4px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontSize: '0.8rem',
+                    textDecoration: 'none',
+                    display: 'inline-block'
+                  }}
+                >
+                  View Details
+                </Link>
+                
+                <button 
+                  onClick={() => deleteCaseStudy(study)}
+                  style={{
+                    backgroundColor: '#f44336',
+                    color: 'white',
+                    padding: '5px 10px',
+                    borderRadius: '4px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontSize: '0.8rem'
+                  }}
+                >
+                  Delete
+                </button>
+              </FlexRow>
             </div>
           ))}
         </FlexCol>

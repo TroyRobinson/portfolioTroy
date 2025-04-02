@@ -5,6 +5,7 @@ import Navigation from '../src/components/Navigation'
 import { PageLayout } from '../src/components/PageLayout'
 import { Tag } from '../src/components/Tag'
 import AboutPage from '../src/pages/AboutPage'
+import CaseStudyDetail from '../src/pages/CaseStudyDetail'
 import ContactPage from '../src/pages/ContactPage'
 import PortfolioPage from '../src/pages/PortfolioPage'
 import { Playground } from '../src/playground'
@@ -40,34 +41,6 @@ export var storyboard = (
       <App />
     </Scene>
     <Scene
-      id='tag-scene'
-      commentId='tag-scene'
-      style={{
-        width: 110,
-        height: 44,
-        position: 'absolute',
-        left: 1808,
-        top: 128,
-      }}
-      data-label='Tag'
-    >
-      <Tag style={{}} />
-    </Scene>
-    <Scene
-      id='pagelayout-scene'
-      commentId='pagelayout-scene'
-      style={{
-        width: 700,
-        height: 524,
-        position: 'absolute',
-        left: 1808,
-        top: 656,
-      }}
-      data-label='PageLayout'
-    >
-      <PageLayout style={{}} />
-    </Scene>
-    <Scene
       id='navigation-scene'
       commentId='navigation-scene'
       style={{
@@ -82,13 +55,41 @@ export var storyboard = (
       <Navigation style={{}} />
     </Scene>
     <Scene
+      id='pagelayout-scene'
+      commentId='pagelayout-scene'
+      style={{
+        width: 700,
+        height: 524,
+        position: 'absolute',
+        left: 2624,
+        top: 656,
+      }}
+      data-label='PageLayout'
+    >
+      <PageLayout style={{}} />
+    </Scene>
+    <Scene
+      id='tag-scene'
+      commentId='tag-scene'
+      style={{
+        width: 110,
+        height: 44,
+        position: 'absolute',
+        left: 3440,
+        top: 128,
+      }}
+      data-label='Tag'
+    >
+      <Tag style={{}} />
+    </Scene>
+    <Scene
       id='aboutpage-scene'
       commentId='aboutpage-scene'
       style={{
         width: 700,
         height: 1188,
         position: 'absolute',
-        left: 2696,
+        left: 4256,
         top: 128,
       }}
       data-label='AboutPage'
@@ -102,7 +103,7 @@ export var storyboard = (
         width: 700,
         height: 1168,
         position: 'absolute',
-        left: 3552,
+        left: 5072,
         top: 128,
       }}
       data-label='ContactPage'
@@ -116,12 +117,26 @@ export var storyboard = (
         width: 700,
         height: 1956,
         position: 'absolute',
-        left: 4400,
+        left: 5888,
         top: 128,
       }}
       data-label='PortfolioPage'
     >
       <PortfolioPage style={{}} />
+    </Scene>
+    <Scene
+      id='casestudydetail-scene'
+      commentId='casestudydetail-scene'
+      style={{
+        width: 700,
+        height: 700,
+        position: 'absolute',
+        left: 6704,
+        top: 128,
+      }}
+      data-label='CaseStudyDetail'
+    >
+      <CaseStudyDetail style={{}} />
     </Scene>
   </Storyboard>
 )

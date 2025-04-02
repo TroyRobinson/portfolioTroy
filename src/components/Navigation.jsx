@@ -1,9 +1,9 @@
 import React from 'react';
 import { FlexRow } from '../utils.jsx';
-import { Link, useRouter } from '../Router.jsx';
+import { Link, useLocation } from '../Router.jsx';
 
 const Navigation = ({ style }) => {
-  const { currentPath } = useRouter();
+  const [location] = useLocation();
   
   return (
     <FlexRow style={{ 
@@ -12,39 +12,39 @@ const Navigation = ({ style }) => {
       ...style
     }}>
       <Link
-        to="/"
+        href="/"
         style={{
           padding: '10px 20px',
           textDecoration: 'none',
           fontWeight: 'bold',
-          color: currentPath === '/' ? '#2b6cb0' : '#666',
-          borderBottom: currentPath === '/' ? '2px solid #2b6cb0' : '2px solid transparent'
+          color: location === '/' ? '#2b6cb0' : '#666',
+          borderBottom: location === '/' ? '2px solid #2b6cb0' : '2px solid transparent'
         }}
       >
         About Me
       </Link>
       
       <Link
-        to="/portfolio"
+        href="/portfolio"
         style={{
           padding: '10px 20px',
           textDecoration: 'none',
           fontWeight: 'bold',
-          color: currentPath === '/portfolio' ? '#2b6cb0' : '#666',
-          borderBottom: currentPath === '/portfolio' ? '2px solid #2b6cb0' : '2px solid transparent'
+          color: location === '/portfolio' ? '#2b6cb0' : '#666',
+          borderBottom: location === '/portfolio' ? '2px solid #2b6cb0' : '2px solid transparent'
         }}
       >
         Case Studies
       </Link>
       
       <Link
-        to="/contact"
+        href="/contact"
         style={{
           padding: '10px 20px',
           textDecoration: 'none',
           fontWeight: 'bold',
-          color: currentPath === '/contact' ? '#2b6cb0' : '#666',
-          borderBottom: currentPath === '/contact' ? '2px solid #2b6cb0' : '2px solid transparent'
+          color: location === '/contact' ? '#2b6cb0' : '#666',
+          borderBottom: location === '/contact' ? '2px solid #2b6cb0' : '2px solid transparent'
         }}
       >
         Contact
