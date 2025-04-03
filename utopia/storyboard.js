@@ -14,20 +14,6 @@ import { Playground } from '../src/playground'
 export var storyboard = (
   <Storyboard>
     <Scene
-      id='app-scene'
-      commentId='app-scene'
-      style={{
-        width: 744,
-        height: 1133,
-        position: 'absolute',
-        left: 992,
-        top: 128,
-      }}
-      data-label='My App'
-    >
-      <App />
-    </Scene>
-    <Scene
       id='navigation-scene'
       commentId='navigation-scene'
       style={{
