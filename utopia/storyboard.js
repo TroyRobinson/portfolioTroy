@@ -129,7 +129,7 @@ export var storyboard = (
       commentId='casestudydetail-scene'
       style={{
         width: 700,
-        height: 700,
+        height: 1024,
         position: 'absolute',
         left: 6704,
         top: 128,
