@@ -28,18 +28,60 @@ export var storyboard = (
       <App />
     </Scene>
     <Scene
-      id='playground-scene'
-      commentId='playground-scene'
+      id='navigation-scene'
+      commentId='navigation-scene'
       style={{
-        width: 700,
-        height: 759,
+        width: 800,
+        height: 80,
         position: 'absolute',
         left: 212,
-        top: 128,
+        top: 1200,
       }}
-      data-label='Playground'
+      data-label='Navigation'
     >
-      <Playground style={{}} />
+      <Navigation style={{}} />
+    </Scene>
+    <Scene
+      id='pagelayout-scene'
+      commentId='pagelayout-scene'
+      style={{
+        width: 600,
+        height: 400,
+        position: 'absolute',
+        left: 212,
+        top: 1340,
+      }}
+      data-label='PageLayout'
+    >
+      <PageLayout style={{}} />
+    </Scene>
+    <Scene
+      id='tag-scene'
+      commentId='tag-scene'
+      style={{
+        width: 110,
+        height: 44,
+        position: 'absolute',
+        left: 212,
+        top: 1800,
+      }}
+      data-label='Tag'
+    >
+      <Tag style={{}} />
+    </Scene>
+    <Scene
+      id='button-scene'
+      commentId='button-scene'
+      style={{
+        width: 120,
+        height: 40,
+        position: 'absolute',
+        left: 600,
+        top: 1200,
+      }}
+      data-label='Button (UI)'
+    >
+      <Button style={{}} />
     </Scene>
     <Scene
       id='aboutpage-scene'
@@ -98,60 +140,18 @@ export var storyboard = (
       <PortfolioPage style={{}} />
     </Scene>
     <Scene
-      id='navigation-scene'
-      commentId='navigation-scene'
+      id='playground-scene'
+      commentId='playground-scene'
       style={{
-        width: 800,
-        height: 80,
+        width: 700,
+        height: 759,
         position: 'absolute',
         left: 212,
-        top: 1200,
+        top: 128,
       }}
-      data-label='Navigation'
+      data-label='Playground'
     >
-      <Navigation style={{}} />
-    </Scene>
-    <Scene
-      id='pagelayout-scene'
-      commentId='pagelayout-scene'
-      style={{
-        width: 100,
-        height: 100,
-        position: 'absolute',
-        left: 212,
-        top: 1340,
-      }}
-      data-label='PageLayout'
-    >
-      <PageLayout style={{}} />
-    </Scene>
-    <Scene
-      id='tag-scene'
-      commentId='tag-scene'
-      style={{
-        width: 110,
-        height: 44,
-        position: 'absolute',
-        left: 212,
-        top: 1500,
-      }}
-      data-label='Tag'
-    >
-      <Tag style={{}} />
-    </Scene>
-    <Scene
-      id='button-scene'
-      commentId='button-scene'
-      style={{
-        width: 120,
-        height: 40,
-        position: 'absolute',
-        left: 600,
-        top: 1200,
-      }}
-      data-label='Button (UI)'
-    >
-      <Button style={{}} />
+      <Playground style={{}} />
     </Scene>
   </Storyboard>
 )

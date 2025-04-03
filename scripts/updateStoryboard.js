@@ -38,72 +38,182 @@ const FORCE_INCLUDE = [
 function extractComponentDimensions(componentPath) {
   try {
     const content = fs.readFileSync(componentPath, 'utf-8');
+    const filename = path.basename(componentPath);
+    
+    // Check for preferred size in JSDoc comments
+    const preferredSizeMatch = content.match(/@preferred-size\s+(\d+)x(\d+)/);
+    if (preferredSizeMatch) {
+      const width = parseInt(preferredSizeMatch[1], 10);
+      const height = parseInt(preferredSizeMatch[2], 10);
+      
+      if (isNumber(width) && isNumber(height)) {
+        console.log(`Found preferred size annotation for ${filename}: ${width}x${height}`);
+        return { width, height };
+      }
+    }
     
     // Default size if we can't determine
-    const defaultSize = { width: 700, height: 700 };
+    let defaultSize = { width: 700, height: 700 };
     
     // Look for direct size specifications in inline styles
     let width, height;
+    let maxWidth, minWidth;
     
-    // Match width and height in style object
-    const styleMatch = content.match(/style={?{[^}]*width:\s*['"]?([^'",}]+)['"]?[^}]*height:\s*['"]?([^'",}]+)['"]?/);
-    if (styleMatch) {
-      width = parseStyleValue(styleMatch[1]);
-      height = parseStyleValue(styleMatch[2]);
+    // Match for all width/height values in style objects throughout the file
+    const widthHeightRegex = /style=\s*{(?:[^{}]|{[^{}]*})*}\s*>/g;
+    const styleBlocks = [];
+    let styleMatch;
+    
+    while ((styleMatch = widthHeightRegex.exec(content)) !== null) {
+      styleBlocks.push(styleMatch[0]);
     }
     
-    // If not found, try to match dimensions in separate style properties
-    if (!width || !height) {
-      const widthMatch = content.match(/width:\s*['"]?([^'",}]+)['"]?/);
-      const heightMatch = content.match(/height:\s*['"]?([^'",}]+)['"]?/);
+    // Also look for style objects defined separately
+    const styleObjectRegex = /style\s*=\s*{([^{}]|{[^{}]*})*}/g;
+    while ((styleMatch = styleObjectRegex.exec(content)) !== null) {
+      styleBlocks.push(styleMatch[0]);
+    }
+    
+    // Look for more complex style definition patterns
+    const complexStyleRegex = /style\s*:\s*{([^{}]|{[^{}]*})*}/g;
+    while ((styleMatch = complexStyleRegex.exec(content)) !== null) {
+      styleBlocks.push(styleMatch[0]);
+    }
+    
+    // Extract width and height from all style blocks
+    for (const block of styleBlocks) {
+      const widthMatch = block.match(/width\s*:\s*['"]?([^'",}]+)['"]?/);
+      const heightMatch = block.match(/height\s*:\s*['"]?([^'",}]+)['"]?/);
+      const maxWidthMatch = block.match(/maxWidth\s*:\s*['"]?([^'",}]+)['"]?/);
+      const minWidthMatch = block.match(/minWidth\s*:\s*['"]?([^'",}]+)['"]?/);
       
-      if (widthMatch) width = parseStyleValue(widthMatch[1]);
-      if (heightMatch) height = parseStyleValue(heightMatch[1]);
+      if (widthMatch && !width) width = parseStyleValue(widthMatch[1]);
+      if (heightMatch && !height) height = parseStyleValue(heightMatch[1]);
+      if (maxWidthMatch && !maxWidth) maxWidth = parseStyleValue(maxWidthMatch[1]);
+      if (minWidthMatch && !minWidth) minWidth = parseStyleValue(minWidthMatch[1]);
     }
     
-    // If we found valid dimensions, return them
+    // Look for container divs or other main elements
+    const containerMatch = content.match(/<(div|section|main|article|aside)\s+[^>]*style\s*=\s*{([^{}]|{[^{}]*})*}/g);
+    if (containerMatch) {
+      for (const container of containerMatch) {
+        const widthMatch = container.match(/width\s*:\s*['"]?([^'",}]+)['"]?/);
+        const heightMatch = container.match(/height\s*:\s*['"]?([^'",}]+)['"]?/);
+        const maxWidthMatch = container.match(/maxWidth\s*:\s*['"]?([^'",}]+)['"]?/);
+        
+        if (widthMatch && !width) width = parseStyleValue(widthMatch[1]);
+        if (heightMatch && !height) height = parseStyleValue(heightMatch[1]);
+        if (maxWidthMatch && !maxWidth) maxWidth = parseStyleValue(maxWidthMatch[1]);
+      }
+    }
+    
+    // If no explicit width/height but max/min width exists
+    if (!width && maxWidth) {
+      width = maxWidth;
+    }
+    
+    // If we found valid numerical dimensions, return them
     if (width && height && isNumber(width) && isNumber(height)) {
-      console.log(`Extracted dimensions for ${path.basename(componentPath)}: ${width}x${height}`);
+      console.log(`Extracted exact dimensions for ${path.basename(componentPath)}: ${width}x${height}`);
       return { width, height };
     }
     
-    // Check for max content or fixed sizing
-    const isFixedHeight = content.includes('height: \'100%\'') || 
-                          content.includes('height: "100%"') ||
-                          content.includes('height: 100%');
+    // Analyze component by type and content
+    const componentType = analyzeComponentType(content, filename);
+    const defaultSizes = getDefaultSizesByComponentType(componentType);
     
-    const isFixedWidth = content.includes('width: \'100%\'') || 
-                         content.includes('width: "100%"') ||
-                         content.includes('width: 100%');
-    
-    // Look for specific component types to make good default sizing guesses
-    const isButton = content.includes('<button') || content.includes('role="button"');
-    const isTag = content.includes('tag') || content.includes('Tag') || content.includes('badge') || content.includes('Badge');
-    const isNav = content.includes('nav') || content.includes('Nav') || content.includes('header') || content.includes('Header');
-    const isCard = content.includes('card') || content.includes('Card');
-    const isLayout = content.includes('Layout') || content.includes('Container') || content.includes('Page');
-    
-    // Assign reasonable defaults based on component type
-    if (isButton) {
-      return { width: 120, height: 40 };
-    } else if (isTag) {
-      return { width: 110, height: 44 };
-    } else if (isNav) {
-      return { width: 800, height: 80 };
-    } else if (isCard) {
-      return { width: 350, height: 400 };
-    } else if (isLayout) {
-      return { width: 800, height: 600 };
-    } else if (isFixedWidth && isFixedHeight) {
-      // If component uses 100% width and height, probably meant to fill parent
-      return defaultSize;
+    // If we have one dimension but not both, use the default ratio from component type
+    if (width && !height) {
+      height = Math.round(width / defaultSizes.aspectRatio);
+      console.log(`Using width ${width} with calculated height ${height} for ${filename}`);
+      return { width, height };
+    } else if (height && !width) {
+      width = Math.round(height * defaultSizes.aspectRatio);
+      console.log(`Using height ${height} with calculated width ${width} for ${filename}`);
+      return { width, height };
     }
     
-    return defaultSize;
+    // If we found no explicit dimensions, use the defaults
+    console.log(`Using default dimensions for ${componentType} component ${filename}: ${defaultSizes.width}x${defaultSizes.height}`);
+    return { width: defaultSizes.width, height: defaultSizes.height };
   } catch (error) {
     console.log(`Error extracting dimensions from ${componentPath}: ${error.message}`);
     return { width: 700, height: 700 };
   }
+}
+
+// Helper function to analyze what type of component we're dealing with
+function analyzeComponentType(content, filename) {
+  const lowerFilename = filename.toLowerCase();
+  
+  // Check common component naming patterns
+  if (lowerFilename.includes('button') || content.includes('<button') || content.includes('role="button"')) {
+    return 'button';
+  } else if (lowerFilename.includes('card') || content.includes('card') || content.includes('Card')) {
+    return 'card';
+  } else if (lowerFilename.includes('tag') || lowerFilename.includes('badge') || 
+            content.includes('tag') || content.includes('Tag') || 
+            content.includes('badge') || content.includes('Badge')) {
+    return 'tag';
+  } else if (lowerFilename.includes('nav') || lowerFilename.includes('header') || 
+            content.includes('nav') || content.includes('Nav') || 
+            content.includes('header') || content.includes('Header')) {
+    return 'nav';
+  } else if (lowerFilename.includes('layout') || lowerFilename.includes('page') || lowerFilename.includes('container') ||
+            content.includes('layout') || content.includes('Layout') || 
+            content.includes('container') || content.includes('Container') || 
+            content.includes('page') || content.includes('Page')) {
+    return 'layout';
+  } else if (lowerFilename.includes('input') || lowerFilename.includes('field') || 
+            content.includes('input') || content.includes('Input') || 
+            content.includes('field') || content.includes('Field')) {
+    return 'input';
+  } else if (lowerFilename.includes('modal') || lowerFilename.includes('dialog') || 
+            content.includes('modal') || content.includes('Modal') || 
+            content.includes('dialog') || content.includes('Dialog')) {
+    return 'modal';
+  } else if (lowerFilename.includes('icon') || content.includes('icon') || content.includes('Icon')) {
+    return 'icon';
+  } else if (lowerFilename.includes('menu') || lowerFilename.includes('dropdown') || 
+            content.includes('menu') || content.includes('Menu') || 
+            content.includes('dropdown') || content.includes('Dropdown')) {
+    return 'menu';
+  } else if (lowerFilename.includes('form') || content.includes('form') || content.includes('Form')) {
+    return 'form';
+  } else if (lowerFilename.includes('list') || content.includes('list') || 
+            content.includes('List') || content.match(/<(ul|ol)\b/)) {
+    return 'list';
+  } else if (lowerFilename.includes('table') || content.includes('<table') || content.includes('Table')) {
+    return 'table';
+  } else if (content.includes('width: \'100%\'') || content.includes('width: "100%"') || content.includes('width: 100%') ||
+            content.includes('maxWidth') || content.includes('max-width')) {
+    return 'full-width';
+  }
+  
+  // Default to generic component
+  return 'generic';
+}
+
+// Default sizes based on component type
+function getDefaultSizesByComponentType(componentType) {
+  const defaults = {
+    button: { width: 120, height: 40, aspectRatio: 3 },
+    tag: { width: 110, height: 44, aspectRatio: 2.5 },
+    nav: { width: 800, height: 80, aspectRatio: 10 },
+    card: { width: 350, height: 400, aspectRatio: 0.875 },
+    layout: { width: 600, height: 400, aspectRatio: 1.5 },
+    input: { width: 240, height: 40, aspectRatio: 6 },
+    modal: { width: 500, height: 300, aspectRatio: 1.67 },
+    icon: { width: 32, height: 32, aspectRatio: 1 },
+    menu: { width: 200, height: 300, aspectRatio: 0.67 },
+    form: { width: 400, height: 500, aspectRatio: 0.8 },
+    list: { width: 300, height: 400, aspectRatio: 0.75 },
+    table: { width: 600, height: 400, aspectRatio: 1.5 },
+    'full-width': { width: 800, height: 600, aspectRatio: 1.33 },
+    generic: { width: 400, height: 300, aspectRatio: 1.33 }
+  };
+  
+  return defaults[componentType] || defaults.generic;
 }
 
 // Helper function to parse style value to number
@@ -113,13 +223,25 @@ function parseStyleValue(value) {
   // Remove quotes and handle px values
   value = value.trim().replace(/['"]/g, '');
   
-  // If it's a px value, extract the number
-  if (value.endsWith('px')) {
+  // Handle different units
+  if (value === '100%' || value === 'auto' || value === 'inherit' || value === 'initial') {
+    return null; // Not an explicit size we can use
+  } else if (value.endsWith('px')) {
     return parseInt(value.slice(0, -2), 10);
-  }
-  
-  // If it's a number as string, convert to number
-  if (!isNaN(value)) {
+  } else if (value.endsWith('rem')) {
+    // Convert rem to px (assuming 1rem = 16px)
+    return parseInt(value.slice(0, -3), 10) * 16;
+  } else if (value.endsWith('em')) {
+    // Convert em to px (assuming 1em = 16px)
+    return parseInt(value.slice(0, -2), 10) * 16;
+  } else if (value.endsWith('vh')) {
+    // Convert vh to px (assuming 100vh = 800px)
+    return parseInt(value.slice(0, -2), 10) * 8;
+  } else if (value.endsWith('vw')) {
+    // Convert vw to px (assuming 100vw = 1200px)
+    return parseInt(value.slice(0, -2), 10) * 12;
+  } else if (!isNaN(value)) {
+    // If it's a number as string, assume it's pixels
     return parseInt(value, 10);
   }
   

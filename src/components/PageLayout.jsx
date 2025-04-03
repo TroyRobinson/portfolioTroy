@@ -3,6 +3,11 @@ import * as Avatar from '@radix-ui/react-avatar';
 import { FlexCol, FlexRow } from '../utils.jsx';
 import Navigation from './Navigation.jsx';
 
+/**
+ * PageLayout component
+ * @component
+ * @preferred-size 600x400
+ */
 export const PageLayout = ({ children, title = 'Welcome', style }) => {
   return (
     <FlexCol
