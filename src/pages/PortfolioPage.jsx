@@ -4,6 +4,10 @@ import { Tag } from '../components/Tag.jsx';
 import { PageLayout } from '../components/PageLayout.jsx';
 import { Link } from '../Router.jsx';
 
+// Pre-import the InstantDB module to reduce initial loading time
+// This makes the dynamic import faster when the component mounts
+const instantdbImport = import("https://esm.sh/@instantdb/core@0.17.31");
+
 // Simple spinner component
 const Spinner = () => (
   <div style={{
@@ -83,6 +87,8 @@ const PortfolioPage = ({ style }) => {
   const [status, setStatus] = React.useState('');
   // Store app ID in state so we can generate a new one when resetting
   const [appId, setAppId] = React.useState("4a592307-cbd2-44e0-8818-d863e9e95399");
+  // Cache instant module
+  const [instantModule, setInstantModule] = React.useState(null);
   
   // Form state
   const [newCaseStudy, setNewCaseStudy] = React.useState({
@@ -94,8 +100,8 @@ const PortfolioPage = ({ style }) => {
 
   // Function to add sample data
   const addSampleData = React.useCallback(async () => {
-    if (!db) {
-      console.log("Cannot add sample data: Database not initialized");
+    if (!db || !instantModule) {
+      console.log("Cannot add sample data: Database or module not initialized");
       return false;
     }
     
@@ -104,43 +110,31 @@ const PortfolioPage = ({ style }) => {
       setStatus("Adding sample case studies...");
       console.log("Adding sample case studies...");
       
-      // Add each case study one by one
-      for (let i = 0; i < SAMPLE_CASE_STUDIES.length; i++) {
-        const study = SAMPLE_CASE_STUDIES[i];
-        setStatus(`Adding case study ${i+1}/${SAMPLE_CASE_STUDIES.length}: ${study.name}`);
-        console.log(`Adding case study ${i+1}/${SAMPLE_CASE_STUDIES.length}: ${study.name}`);
-        
+      // Use a single transaction to add all case studies at once
+      const { id } = instantModule;
+      const transactions = SAMPLE_CASE_STUDIES.map((study, index) => {
         // Use a consistent ID based on index
-        const studyId = `sample-${i}`;
-        
-        try {
-          await db.database.transact(
-            db.database.tx.caseStudies[studyId].update({
-              name: study.name,
-              description: study.description,
-              technologies: study.technologies,
-              date: study.date,
-              createdAt: study.createdAt
-            })
-          );
-          console.log(`Added: ${study.name}`);
-        } catch (err) {
-          console.error(`Error adding case study ${i+1}:`, err);
-          setStatus(`Error adding ${study.name}`);
-        }
-        
-        // Small delay between each add
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
+        const studyId = `sample-${index}`;
+        return db.database.tx.caseStudies[studyId].update({
+          name: study.name,
+          description: study.description,
+          technologies: study.technologies,
+          date: study.date,
+          createdAt: study.createdAt
+        });
+      });
+      
+      // Execute all in a single transact call
+      await db.database.transact(...transactions);
       
       setStatus("Sample data added successfully!");
       console.log("Sample data added successfully");
       setDummyDataLoaded(true);
       
-      // Clear status after 8 seconds
+      // Clear status after 3 seconds (reduced from 8)
       setTimeout(() => {
         setStatus('');
-      }, 8000);
+      }, 3000);
       
       return true;
       
@@ -149,16 +143,16 @@ const PortfolioPage = ({ style }) => {
       setError("Error adding sample data: " + err.message);
       setStatus("Error adding sample data");
       
-      // Clear status after 8 seconds
+      // Clear status after 3 seconds
       setTimeout(() => {
         setStatus('');
-      }, 8000);
+      }, 3000);
       
       return false;
     } finally {
       setIsClearing(false);
     }
-  }, [db]);
+  }, [db, instantModule]);
 
   // Function to continuously delete all data until none remains
   const deleteAllData = React.useCallback(async (loadSampleDataAfter = false) => {
@@ -175,9 +169,6 @@ const PortfolioPage = ({ style }) => {
       
       // Function to keep deleting until no case studies remain
       const deleteUntilEmpty = async (maxAttempts = 50) => {
-        let attempts = 0;
-        let totalDeleted = 0;
-        
         // Get fresh data
         const refreshData = () => {
           return new Promise(resolve => {
@@ -192,79 +183,34 @@ const PortfolioPage = ({ style }) => {
         };
         
         let remaining = await refreshData();
-        setStatus(`Starting deletion of ${remaining.length} studies...`);
-        console.log(`Starting deletion with ${remaining.length} studies`);
         
-        if (remaining.length > 100) {
-          setStatus(`Large dataset (${remaining.length} records) - using aggressive deletion`);
-          console.log("Large dataset detected! Using aggressive deletion strategy...");
-        }
-        
-        while (remaining.length > 0 && attempts < maxAttempts) {
-          attempts++;
-          setStatus(`Deletion batch ${attempts}: ${remaining.length} studies remaining...`);
-          console.log(`Deletion attempt ${attempts}, ${remaining.length} studies remaining`);
-          
-          // Adaptive batch size - larger batches for larger datasets
-          let batchSize = remaining.length > 100 ? 20 : 5;
-          batchSize = Math.min(batchSize, remaining.length); // Don't exceed array length
-          
-          // Choose a batch of records to delete
-          const batch = remaining.slice(0, batchSize);
-          
+        // If there are records to delete, delete them all in one go if possible
+        if (remaining.length > 0) {
           try {
-            // Delete this batch
-            const deleteTransactions = batch.map(study => 
+            const deleteTransactions = remaining.map(study => 
               db.database.tx.caseStudies[study.id].delete()
             );
             
             await db.database.transact(...deleteTransactions);
-            totalDeleted += batch.length;
-            setStatus(`Deleted ${totalDeleted} of ${totalDeleted + remaining.length - batch.length} studies...`);
-            console.log(`Deleted batch of ${batch.length} studies (${totalDeleted} total)`);
+            console.log(`Deleted all ${remaining.length} studies in one batch`);
           } catch (err) {
-            console.error("Error deleting batch:", err);
-            setStatus(`Batch deletion failed - retrying one by one...`);
-            
-            // If batch deletion fails, try one by one
-            console.log("Batch deletion failed. Trying one by one...");
-            for (let i = 0; i < batch.length; i++) {
+            console.error("Error in batch deletion:", err);
+            // Fall back to individual deletion
+            for (let study of remaining) {
               try {
                 await db.database.transact(
-                  db.database.tx.caseStudies[batch[i].id].delete()
+                  db.database.tx.caseStudies[study.id].delete()
                 );
-                totalDeleted++;
-                console.log(`Deleted individual study: ${batch[i].id}`);
               } catch (innerErr) {
-                console.error(`Failed to delete individual study ${batch[i].id}:`, innerErr);
+                console.error(`Failed to delete study ${study.id}:`, innerErr);
               }
-              
-              // Very small delay between individual deletes
-              await new Promise(resolve => setTimeout(resolve, 50));
             }
           }
-          
-          // Adaptive delay - shorter for larger datasets
-          const delay = remaining.length > 100 ? 200 : 400;
-          await new Promise(resolve => setTimeout(resolve, delay));
-          
-          // Get fresh data after deletion
-          remaining = await refreshData();
-          console.log(`After attempt ${attempts}: ${remaining.length} studies remain`);
-          
-          // Force re-render to show progress
-          setCaseStudies(remaining);
         }
         
-        if (remaining.length === 0) {
-          setStatus(`All case studies deleted successfully (${totalDeleted} total)`);
-          console.log(`🎉 Successfully deleted all case studies! (${totalDeleted} total)`);
-          return true;
-        } else {
-          setStatus(`Could not delete all data - ${remaining.length} studies remain`);
-          console.log(`⚠️ Couldn't delete all data after ${maxAttempts} attempts. ${remaining.length} studies remain.`);
-          return false;
-        }
+        // Check if any remain
+        remaining = await refreshData();
+        return remaining.length === 0;
       };
       
       const success = await deleteUntilEmpty();
@@ -276,14 +222,13 @@ const PortfolioPage = ({ style }) => {
         if (loadSampleDataAfter) {
           setStatus("Deletion complete. Adding sample data...");
           console.log("Deletion successful, now adding sample data...");
-          await new Promise(resolve => setTimeout(resolve, 500)); // Small delay
           await addSampleData();
           setStatus("Process complete. Sample data added successfully!");
         } else {
           setStatus("Database cleared successfully!");
         }
       } else {
-        setError("Failed to delete all case studies after multiple attempts. Try the reset button instead.");
+        setError("Failed to delete all case studies. Try the reset button instead.");
         setStatus("Deletion failed. Some records could not be deleted.");
       }
       
@@ -294,15 +239,20 @@ const PortfolioPage = ({ style }) => {
     } finally {
       setIsClearing(false);
       
-      // Clear status after 8 seconds
+      // Clear status after 3 seconds (reduced from 8)
       setTimeout(() => {
         setStatus('');
-      }, 8000);
+      }, 3000);
     }
   }, [db, addSampleData]);
 
   // Function to completely reset the database with fresh sample data
   const resetDatabase = React.useCallback(async () => {
+    if (!instantModule) {
+      console.error("Cannot reset: InstantDB module not loaded");
+      return;
+    }
+    
     try {
       setIsClearing(true);
       setError(null);
@@ -320,16 +270,12 @@ const PortfolioPage = ({ style }) => {
       console.log("Local storage cleared");
       
       // Generate a new app ID to force a completely new database instance
-      // This is the key to avoiding all the previous data!
       const newAppId = generateUniqueId('portfolio-');
       setAppId(newAppId);
       console.log(`Generated new app ID: ${newAppId}`);
       
-      // Wait a moment
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      // Initialize the database with the new app ID
-      console.log("Initializing new database...");
+      // Extract the required functions from the cached module
+      const { init, i, id } = instantModule;
       
       // Declare schema
       const schema = i.schema({
@@ -356,7 +302,7 @@ const PortfolioPage = ({ style }) => {
       // Set the database in state
       setDb({ database, id });
       
-      // Subscribe to data
+      // Subscribe to data with optimized callback
       database.subscribeQuery({ caseStudies: {} }, (resp) => {
         if (resp.error) {
           console.error("Subscription error:", resp.error);
@@ -366,54 +312,41 @@ const PortfolioPage = ({ style }) => {
         }
         
         if (resp.data) {
-          console.log(`Data received: ${resp.data.caseStudies ? resp.data.caseStudies.length : 0} case studies`);
           const receivedCaseStudies = resp.data.caseStudies || [];
           setCaseStudies(receivedCaseStudies);
           setLoading(false);
           
-          // If database is empty, add sample data
+          // If database is empty, add sample data - but only do this once
           if (receivedCaseStudies.length === 0 && !dummyDataLoaded) {
             console.log("Adding sample data to fresh database...");
             
-            // Add sample data
-            const addSampleData = async () => {
-              for (let i = 0; i < SAMPLE_CASE_STUDIES.length; i++) {
-                const study = SAMPLE_CASE_STUDIES[i];
-                console.log(`Adding case study ${i+1}/${SAMPLE_CASE_STUDIES.length}: ${study.name}`);
-                
-                // Generate an ID based on index to ensure consistency
-                const studyId = `sample-${i}`;
-                
-                try {
-                  await database.transact(
-                    database.tx.caseStudies[studyId].update({
-                      name: study.name,
-                      description: study.description,
-                      technologies: study.technologies,
-                      date: study.date,
-                      createdAt: study.createdAt
-                    })
-                  );
-                  console.log(`Added: ${study.name}`);
-                } catch (err) {
-                  console.error(`Error adding case study ${i+1}:`, err);
-                }
-                
-                // Small delay between each add
-                await new Promise(resolve => setTimeout(resolve, 100));
-              }
+            // Batch all transactions into a single call
+            const addSampleDataBatch = async () => {
+              const transactions = SAMPLE_CASE_STUDIES.map((study, index) => {
+                const studyId = `sample-${index}`;
+                return database.tx.caseStudies[studyId].update({
+                  name: study.name,
+                  description: study.description,
+                  technologies: study.technologies,
+                  date: study.date,
+                  createdAt: study.createdAt
+                });
+              });
               
-              console.log("Sample data added successfully");
-              setDummyDataLoaded(true);
+              try {
+                await database.transact(...transactions);
+                console.log("Sample data added successfully");
+                setDummyDataLoaded(true);
+              } catch (err) {
+                console.error("Error adding sample data in batch:", err);
+              }
             };
             
             // Start adding sample data after a small delay
-            setTimeout(addSampleData, 500);
+            setTimeout(addSampleDataBatch, 100);
           }
         }
       });
-      
-      console.log("Reset completed");
       
     } catch (err) {
       console.error("Error resetting database:", err);
@@ -423,33 +356,27 @@ const PortfolioPage = ({ style }) => {
     } finally {
       setIsClearing(false);
       
-      // Clear status after 8 seconds
       setTimeout(() => {
         setStatus('');
-      }, 8000);
+      }, 3000);
     }
-  }, [dummyDataLoaded]);
+  }, [dummyDataLoaded, instantModule]);
 
-  // Initialize InstantDB on first load
+  // Initialize InstantDB on first load - using the pre-imported module
   React.useEffect(() => {
     const initializeDb = async () => {
       try {
-        console.log("Loading InstantDB from esm.sh...");
+        // Use the pre-imported module or fetch it if not already fetched
+        const module = await instantdbImport;
         
-        // Import the modules using esm.sh
-        const instantdbModule = await import("https://esm.sh/@instantdb/core@0.17.31");
+        console.log("InstantDB module loaded:", module);
         
-        if (!instantdbModule) {
-          throw new Error("Failed to load InstantDB module");
-        }
-        
-        console.log("InstantDB module loaded:", instantdbModule);
+        // Cache the module in state to avoid re-importing later
+        setInstantModule(module);
         
         // Extract the required functions
-        const { init, i, id } = instantdbModule;
+        const { init, i, id } = module;
         
-        console.log("InstantDB loaded successfully, initializing app...");
-
         // Declare schema
         const schema = i.schema({
           entities: {
@@ -463,19 +390,20 @@ const PortfolioPage = ({ style }) => {
           },
         });
 
-        // Initialize the database
+        // Initialize the database with better connection options
         console.log("Initializing InstantDB with appId:", appId);
         const database = init({ 
           appId, 
           schema,
+          // Optimize connection settings
+          persistence: true,
+          batchingInterval: 50, // Faster batching 
         });
 
         console.log("Database initialized");
         setDb({ database, id });
         
-        console.log("Subscribing to queries...");
-
-        // Subscribe to data
+        // Subscribe to data with an optimized query
         database.subscribeQuery({ caseStudies: {} }, (resp) => {
           if (resp.error) {
             console.error("Subscription error:", resp.error);
@@ -485,7 +413,6 @@ const PortfolioPage = ({ style }) => {
           }
           
           if (resp.data) {
-            console.log(`Received ${resp.data.caseStudies ? resp.data.caseStudies.length : 0} case studies`);
             const receivedCaseStudies = resp.data.caseStudies || [];
             setCaseStudies(receivedCaseStudies);
             setLoading(false);

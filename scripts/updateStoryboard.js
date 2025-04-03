@@ -3,8 +3,15 @@ const path = require('path');
 
 // Configuration
 const SRC_DIR = path.resolve(__dirname, '../src');
+const COMPONENTS_DIR = path.resolve(SRC_DIR, './components');
 const STORYBOARD_PATH = path.resolve(__dirname, '../utopia/storyboard.js');
 const COMPONENT_EXTENSIONS = ['.jsx', '.js', '.tsx', '.ts'];
+
+// Storyboard layout configuration
+const CLUSTER_HORIZONTAL_SPACING = 1200; // Space between cluster groups
+const COMPONENT_HORIZONTAL_SPACING = 300; // Space between components in same cluster
+const COMPONENT_VERTICAL_SPACING = 200;   // Vertical spacing between component rows
+const MAX_COMPONENTS_PER_ROW = 3;         // Maximum components per row in a cluster
 
 // Files to ignore - can be exact names or patterns (as strings)
 const IGNORED_FILES = [
@@ -18,11 +25,111 @@ const IGNORED_FILES = [
   'types', // Ignore type definition files
 ];
 
+// Flag to enable auto-sizing for components
+const AUTO_SIZE_COMPONENTS = true;
+
 // File patterns that should be included even if they match ignore patterns
 const FORCE_INCLUDE = [
   // Add specific files to always include here if needed
   // Example: 'SpecialComponent', 'ImportantUtil'
 ];
+
+// Add a function to analyze component file and extract dimensions
+function extractComponentDimensions(componentPath) {
+  try {
+    const content = fs.readFileSync(componentPath, 'utf-8');
+    
+    // Default size if we can't determine
+    const defaultSize = { width: 700, height: 700 };
+    
+    // Look for direct size specifications in inline styles
+    let width, height;
+    
+    // Match width and height in style object
+    const styleMatch = content.match(/style={?{[^}]*width:\s*['"]?([^'",}]+)['"]?[^}]*height:\s*['"]?([^'",}]+)['"]?/);
+    if (styleMatch) {
+      width = parseStyleValue(styleMatch[1]);
+      height = parseStyleValue(styleMatch[2]);
+    }
+    
+    // If not found, try to match dimensions in separate style properties
+    if (!width || !height) {
+      const widthMatch = content.match(/width:\s*['"]?([^'",}]+)['"]?/);
+      const heightMatch = content.match(/height:\s*['"]?([^'",}]+)['"]?/);
+      
+      if (widthMatch) width = parseStyleValue(widthMatch[1]);
+      if (heightMatch) height = parseStyleValue(heightMatch[1]);
+    }
+    
+    // If we found valid dimensions, return them
+    if (width && height && isNumber(width) && isNumber(height)) {
+      console.log(`Extracted dimensions for ${path.basename(componentPath)}: ${width}x${height}`);
+      return { width, height };
+    }
+    
+    // Check for max content or fixed sizing
+    const isFixedHeight = content.includes('height: \'100%\'') || 
+                          content.includes('height: "100%"') ||
+                          content.includes('height: 100%');
+    
+    const isFixedWidth = content.includes('width: \'100%\'') || 
+                         content.includes('width: "100%"') ||
+                         content.includes('width: 100%');
+    
+    // Look for specific component types to make good default sizing guesses
+    const isButton = content.includes('<button') || content.includes('role="button"');
+    const isTag = content.includes('tag') || content.includes('Tag') || content.includes('badge') || content.includes('Badge');
+    const isNav = content.includes('nav') || content.includes('Nav') || content.includes('header') || content.includes('Header');
+    const isCard = content.includes('card') || content.includes('Card');
+    const isLayout = content.includes('Layout') || content.includes('Container') || content.includes('Page');
+    
+    // Assign reasonable defaults based on component type
+    if (isButton) {
+      return { width: 120, height: 40 };
+    } else if (isTag) {
+      return { width: 110, height: 44 };
+    } else if (isNav) {
+      return { width: 800, height: 80 };
+    } else if (isCard) {
+      return { width: 350, height: 400 };
+    } else if (isLayout) {
+      return { width: 800, height: 600 };
+    } else if (isFixedWidth && isFixedHeight) {
+      // If component uses 100% width and height, probably meant to fill parent
+      return defaultSize;
+    }
+    
+    return defaultSize;
+  } catch (error) {
+    console.log(`Error extracting dimensions from ${componentPath}: ${error.message}`);
+    return { width: 700, height: 700 };
+  }
+}
+
+// Helper function to parse style value to number
+function parseStyleValue(value) {
+  if (!value) return null;
+  
+  // Remove quotes and handle px values
+  value = value.trim().replace(/['"]/g, '');
+  
+  // If it's a px value, extract the number
+  if (value.endsWith('px')) {
+    return parseInt(value.slice(0, -2), 10);
+  }
+  
+  // If it's a number as string, convert to number
+  if (!isNaN(value)) {
+    return parseInt(value, 10);
+  }
+  
+  return null;
+}
+
+// Helper function to check if a value is a number
+function isNumber(value) {
+  return typeof value === 'number' && !isNaN(value) && isFinite(value);
+}
 
 // Scan for React components in a directory
 function scanForComponents(dir) {
@@ -104,11 +211,18 @@ function scanForComponents(dir) {
             params.includes('...') || 
             params.match(/{\s*[^}]*\s*}/); // Destructuring pattern
           
+          // Extract dimensions if this is a component in the components directory
+          let componentDimensions = null;
+          if (AUTO_SIZE_COMPONENTS && filePath.includes(path.sep + 'components' + path.sep)) {
+            componentDimensions = extractComponentDimensions(filePath);
+          }
+          
           components.push({
             name: componentName,
             path: path.relative(SRC_DIR, filePath).replace(/\\/g, '/'),
             fullPath: filePath,
-            hasStyleProp
+            hasStyleProp,
+            dimensions: componentDimensions
           });
         }
       }
@@ -134,11 +248,18 @@ function scanForComponents(dir) {
             
             // Avoid duplicates if the component was already added via named export
             if (!components.some(c => c.name === componentName)) {
+              // Extract dimensions if this is a component in the components directory
+              let componentDimensions = null;
+              if (AUTO_SIZE_COMPONENTS && filePath.includes(path.sep + 'components' + path.sep)) {
+                componentDimensions = extractComponentDimensions(filePath);
+              }
+              
               components.push({
                 name: componentName,
                 path: path.relative(SRC_DIR, filePath).replace(/\\/g, '/'),
                 fullPath: filePath,
-                hasStyleProp
+                hasStyleProp,
+                dimensions: componentDimensions
               });
             }
           }
@@ -194,6 +315,9 @@ function generateStoryboard(components, existingScenes = null) {
   // Track scene configurations that we're building
   const sceneConfigurations = {};
   
+  // Group components by their directory
+  const componentGroups = groupComponentsByDirectory(components);
+  
   // First, add scenes for components with existing configurations
   if (existingScenes) {
     components.forEach(component => {
@@ -247,80 +371,71 @@ function generateStoryboard(components, existingScenes = null) {
     }
   });
   
-  // Calculate starting position for new scenes
-  // First, find gaps between existing scenes where we could fit a new scene
-  let availableGaps = [];
-  if (usedPositions.size > 1) {
-    // Convert positions to sorted array
-    const positionsArray = Array.from(usedPositions).sort((a, b) => a - b);
+  // Calculate starting position for the first cluster
+  let nextClusterLeftPosition = Math.max(furthestRightPosition + defaultSceneSpacing, 2000);
+
+  // Now add remaining components by their directory groups
+  for (const [dirPath, groupComponents] of Object.entries(componentGroups)) {
+    console.log(`Creating cluster for directory: ${dirPath}`);
+
+    // Skip empty groups
+    const componentsInGroup = groupComponents.filter(component => 
+      !addedComponents.has(component.name)
+    );
     
-    // Find gaps large enough to fit a scene with proper spacing
-    for (let i = 0; i < positionsArray.length - 1; i++) {
-      const startPos = positionsArray[i];
-      const endPos = positionsArray[i+1];
-      const gap = endPos - startPos;
-      
-      // If gap is large enough to fit a scene (minimum defaultSceneSpacing)
-      if (gap >= defaultSceneSpacing) {
-        // Calculate how many scenes could fit in this gap
-        const scenesFit = Math.floor(gap / defaultSceneSpacing);
+    if (componentsInGroup.length === 0) {
+      console.log(`No components to add in directory: ${dirPath}`);
+      continue;
+    }
+    
+    // Calculate cluster layout
+    const rows = Math.ceil(componentsInGroup.length / MAX_COMPONENTS_PER_ROW);
+    
+    // Add components in this group
+    let componentIndex = 0;
+    
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < MAX_COMPONENTS_PER_ROW; col++) {
+        if (componentIndex >= componentsInGroup.length) break;
         
-        // For each possible position in the gap
-        for (let j = 0; j < scenesFit; j++) {
-          const gapPosition = startPos + defaultSceneSpacing * (j + 1);
-          // Ensure we're not too close to the end scene
-          if (gapPosition + defaultSceneWidth + 20 <= endPos) {  // 20px buffer
-            availableGaps.push({
-              position: gapPosition,
-              size: gap
-            });
+        const component = componentsInGroup[componentIndex];
+        componentIndex++;
+        
+        if (!addedComponents.has(component.name)) {
+          const sceneId = `${component.name.toLowerCase()}-scene`;
+          
+          // Determine width and height - use component dimensions if available
+          let width = defaultSceneWidth;
+          let height = 700;
+          
+          if (component.dimensions) {
+            width = component.dimensions.width;
+            height = component.dimensions.height;
           }
+          
+          // Calculate position in the cluster
+          const left = nextClusterLeftPosition + (col * COMPONENT_HORIZONTAL_SPACING);
+          const top = defaultTop + (row * COMPONENT_VERTICAL_SPACING);
+          
+          sceneConfigurations[sceneId] = {
+            width: width,
+            height: height,
+            left: left,
+            top: top,
+            label: component.name,
+            component,
+            group: dirPath // Store group info for potential future use
+          };
+          
+          addedComponents.add(component.name);
+          console.log(`Added new scene for ${component.name} at position ${left}x${top} (in cluster ${dirPath})`);
         }
       }
     }
     
-    console.log(`Found ${availableGaps.length} gaps between existing scenes`);
+    // Move to next cluster position
+    nextClusterLeftPosition += CLUSTER_HORIZONTAL_SPACING;
   }
-
-  let nextPosition = furthestRightPosition + defaultSceneSpacing;
-
-  // Now add remaining components to gaps or to the right of the furthest right scene
-  componentsToAdd.forEach(component => {
-    if (!addedComponents.has(component.name)) {
-      const sceneId = `${component.name.toLowerCase()}-scene`;
-      
-      // If we have available gaps, use the first one
-      if (availableGaps.length > 0) {
-        const gap = availableGaps.shift(); // Take the first available gap
-        
-        sceneConfigurations[sceneId] = {
-          width: defaultSceneWidth,
-          height: 700,
-          left: gap.position,
-          top: defaultTop,
-          label: component.name,
-          component
-        };
-        
-        addedComponents.add(component.name);
-        console.log(`Added new scene for ${component.name} at position ${gap.position} (in a gap)`);
-      } else {
-        // No gaps available, place at the end
-        sceneConfigurations[sceneId] = {
-          width: defaultSceneWidth,
-          height: 700,
-          left: nextPosition,
-          top: defaultTop,
-          label: component.name,
-          component
-        };
-        
-        addedComponents.add(component.name);
-        nextPosition += defaultSceneSpacing;
-        console.log(`Added new scene for ${component.name} at position ${nextPosition - defaultSceneSpacing} (at the end)`);
-      }
-    }
-  });
   
   // Now rearrange scenes to close any gaps
   // First, add the component reference to existing scenes
@@ -341,11 +456,8 @@ function generateStoryboard(components, existingScenes = null) {
     });
   }
   
-  // Reorganize scenes to close gaps
-  const reorganizedScenes = reorganizeScenes(sceneConfigurations, defaultSceneSpacing);
-  
   // Now add all scenes to the content in the reorganized positions
-  Object.entries(reorganizedScenes).forEach(([sceneId, config]) => {
+  Object.entries(sceneConfigurations).forEach(([sceneId, config]) => {
     if (config.component) {
       addComponentScene(config.component, sceneId, config);
       
@@ -390,108 +502,42 @@ function generateStoryboard(components, existingScenes = null) {
   return imports + content;
 }
 
-// Function to reorganize scenes to close gaps between them
-function reorganizeScenes(sceneConfigurations, defaultSpacing) {
-  // Clone the configurations to avoid modifying the original
-  const reorganized = JSON.parse(JSON.stringify(sceneConfigurations));
+// Function to group components by their directory
+function groupComponentsByDirectory(components) {
+  const groups = {};
   
-  // Special handling for Playground and App - they should keep their original positions
-  const hasPlayground = Object.values(reorganized).some(config => 
-    config.label === 'Playground' || (config.component && config.component.name === 'Playground')
-  );
-  
-  const hasApp = Object.values(reorganized).some(config => 
-    config.label === 'My App' || config.label === 'App' || 
-    (config.component && config.component.name === 'App')
-  );
-  
-  // Extract scene IDs and positions, so we can sort them by position
-  const scenes = Object.entries(reorganized).map(([id, config]) => ({
-    id,
-    left: config.left,
-    config,
-    originalLeft: config.left // Save original position for comparison
-  }));
-  
-  // Sort scenes by left position (ascending)
-  scenes.sort((a, b) => a.left - b.left);
-  
-  // Keep track of position shifts
-  let positionShifts = 0;
-  
-  // Start with the leftmost position based on whether we have Playground or App
-  let currentPosition = 212; // Default start position
-  if (hasPlayground) {
-    // Find the Playground scene and set its position
-    const playgroundScene = scenes.find(scene => 
-      scene.config.label === 'Playground' || 
-      (scene.config.component && scene.config.component.name === 'Playground')
-    );
+  components.forEach(component => {
+    // Get directory path relative to src
+    const fullPath = component.path;
+    const dirParts = path.dirname(fullPath).split('/');
     
-    if (playgroundScene) {
-      playgroundScene.config.left = 212;
-      currentPosition = 212 + defaultSpacing; // Next position
-    }
-  }
-  
-  // If we have App, handle it separately
-  if (hasApp) {
-    // Find the App scene
-    const appScene = scenes.find(scene => 
-      scene.config.label === 'My App' || scene.config.label === 'App' || 
-      (scene.config.component && scene.config.component.name === 'App')
-    );
+    let groupKey = 'root'; // Default group for components directly in src
     
-    if (appScene) {
-      // If Playground exists, App should be at 992, otherwise at 212
-      if (hasPlayground) {
-        appScene.config.left = 992;
-        currentPosition = 992 + defaultSpacing; // Next position
+    // Check if component is in /components or a subdirectory
+    if (dirParts[0] === 'components') {
+      if (dirParts.length > 1) {
+        // This is a subdirectory like components/UI
+        groupKey = dirParts.slice(0, 2).join('/');
       } else {
-        appScene.config.left = 212;
-        currentPosition = 212 + defaultSpacing; // Next position
+        // This is the main components directory
+        groupKey = dirParts[0];
       }
+    } else if (dirParts[0] === 'pages') {
+      // Group pages together
+      groupKey = 'pages';
+    } else if (dirParts[0] !== '.') {
+      // Any other directory that's not root
+      groupKey = dirParts[0];
     }
-  }
-  
-  // Now place all other scenes in sequence with proper spacing
-  scenes.forEach((scene) => {
-    // Skip Playground and App as we've already positioned them
-    const isPlayground = scene.config.label === 'Playground' || 
-                         (scene.config.component && scene.config.component.name === 'Playground');
     
-    const isApp = scene.config.label === 'My App' || scene.config.label === 'App' || 
-                  (scene.config.component && scene.config.component.name === 'App');
-    
-    if (!isPlayground && !isApp) {
-      // If this scene would be positioned differently, track the shift
-      if (scene.config.left !== currentPosition) {
-        positionShifts++;
-        console.log(`Repositioning scene ${scene.id} from ${scene.originalLeft} to ${currentPosition}`);
-      }
-      
-      // Position this scene at the current position
-      scene.config.left = currentPosition;
-      
-      // Move to the next position
-      currentPosition += defaultSpacing;
+    if (!groups[groupKey]) {
+      groups[groupKey] = [];
     }
+    
+    groups[groupKey].push(component);
   });
   
-  // Log the number of scenes that were repositioned
-  if (positionShifts > 0) {
-    console.log(`Repositioned ${positionShifts} scenes to close gaps`);
-  } else {
-    console.log('No scene repositioning needed - layout already optimal');
-  }
-  
-  // Convert back to the original format
-  const result = {};
-  scenes.forEach(scene => {
-    result[scene.id] = scene.config;
-  });
-  
-  return result;
+  return groups;
 }
 
 // Main function
