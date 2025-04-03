@@ -118,7 +118,7 @@ export var storyboard = (
         width: 1200,
         height: 100,
         position: 'absolute',
-        left: 2950,
+        left: 2600,
         top: 128,
       }}
       data-label='PageLayout'
@@ -132,7 +132,7 @@ export var storyboard = (
         width: 110,
         height: 44,
         position: 'absolute',
-        left: 3400,
+        left: 3200,
         top: 128,
       }}
       data-label='Tag'
@@ -146,7 +146,7 @@ export var storyboard = (
         width: 120,
         height: 40,
         position: 'absolute',
-        left: 3200,
+        left: 4000,
         top: 128,
       }}
       data-label='Button'
