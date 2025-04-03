@@ -25,6 +25,14 @@ const Spinner = () => (
   </div>
 );
 
+// Generic filler data to use when no case study is found
+const GENERIC_CASE_STUDY = {
+  name: 'Case Study Not Found',
+  description: 'Sorry, we couldn\'t find the case study you\'re looking for. This might be because the URL is incorrect or the case study has been removed.',
+  technologies: 'React, Wouter, JavaScript',
+  date: new Date().toISOString().split('T')[0]
+};
+
 const CaseStudyDetail = ({ slug }) => {
   const [loading, setLoading] = useState(true);
   const [caseStudy, setCaseStudy] = useState(null);
@@ -34,7 +42,8 @@ const CaseStudyDetail = ({ slug }) => {
   // For now, we'll simulate loading case study data
   useEffect(() => {
     if (!slug) {
-      setError('Case study not found');
+      // Use generic data instead of just showing an error
+      setCaseStudy(GENERIC_CASE_STUDY);
       setLoading(false);
       return;
     }
@@ -51,6 +60,8 @@ const CaseStudyDetail = ({ slug }) => {
         await new Promise(resolve => setTimeout(resolve, 800));
         
         // For now we'll just use the slug as the case study name
+        // In a real app, you would check if the case study exists
+        // and use generic data if it doesn't
         const dummyData = {
           name: slug.replace(/-/g, ' '),
           description: 'This is a case study detail page. In a real implementation, this content would be fetched from your database.',
@@ -62,7 +73,8 @@ const CaseStudyDetail = ({ slug }) => {
         setLoading(false);
       } catch (err) {
         console.error('Error fetching case study:', err);
-        setError('Failed to load case study');
+        // Use generic data instead of just showing an error
+        setCaseStudy(GENERIC_CASE_STUDY);
         setLoading(false);
       }
     };
@@ -71,7 +83,10 @@ const CaseStudyDetail = ({ slug }) => {
   }, [slug]);
 
   return (
-    <PageLayout style={{ minHeight: '100vh' }}>
+    <PageLayout 
+      style={{ minHeight: '100vh' }}
+      title={caseStudy ? caseStudy.name : 'Loading Case Study...'}
+    >
       <FlexCol style={{ width: '100%', maxWidth: '900px', margin: '0 auto', padding: '20px' }}>
         <Link href="/portfolio" style={{ 
           marginBottom: '20px', 
@@ -89,7 +104,7 @@ const CaseStudyDetail = ({ slug }) => {
           </div>
         )}
         
-        {error && (
+        {error && !caseStudy && (
           <div style={{ 
             color: 'red', 
             backgroundColor: '#ffeeee', 
@@ -101,10 +116,9 @@ const CaseStudyDetail = ({ slug }) => {
           </div>
         )}
         
-        {!loading && !error && caseStudy && (
+        {!loading && caseStudy && (
           <FlexCol style={{ gap: '20px' }}>
-            <FlexRow style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-              <h1 style={{ fontSize: '2rem', fontWeight: 'bold' }}>{caseStudy.name}</h1>
+            <FlexRow style={{ justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <span style={{ color: '#666' }}>{caseStudy.date}</span>
             </FlexRow>
             
@@ -120,6 +134,34 @@ const CaseStudyDetail = ({ slug }) => {
             </FlexCol>
             
             {/* Additional case study content would go here */}
+            
+            {caseStudy === GENERIC_CASE_STUDY && (
+              <div style={{ 
+                marginTop: '20px', 
+                padding: '15px', 
+                backgroundColor: '#f8f9fa', 
+                borderRadius: '4px',
+                border: '1px solid #e0e0e0'
+              }}>
+                <h3 style={{ fontSize: '1.1rem', color: '#555', marginBottom: '10px' }}>
+                  Looking for case studies?
+                </h3>
+                <p style={{ marginBottom: '15px' }}>
+                  Check out our portfolio to browse all available case studies.
+                </p>
+                <Link href="/portfolio" style={{
+                  display: 'inline-block',
+                  padding: '8px 16px',
+                  backgroundColor: '#2b6cb0',
+                  color: 'white',
+                  borderRadius: '4px',
+                  textDecoration: 'none',
+                  fontWeight: 'bold'
+                }}>
+                  View Portfolio
+                </Link>
+              </div>
+            )}
           </FlexCol>
         )}
       </FlexCol>
