@@ -14,60 +14,32 @@ import { Playground } from '../src/playground'
 export var storyboard = (
   <Storyboard>
     <Scene
-      id='navigation-scene'
-      commentId='navigation-scene'
+      id='app-scene'
+      commentId='app-scene'
       style={{
-        width: 800,
-        height: 80,
+        width: 744,
+        height: 1133,
         position: 'absolute',
-        left: 212,
-        top: 1200,
+        left: 992,
+        top: 128,
       }}
-      data-label='Navigation'
+      data-label='My App'
     >
-      <Navigation style={{}} />
+      <App />
     </Scene>
     <Scene
-      id='pagelayout-scene'
-      commentId='pagelayout-scene'
+      id='playground-scene'
+      commentId='playground-scene'
       style={{
-        width: 600,
-        height: 400,
+        width: 700,
+        height: 759,
         position: 'absolute',
         left: 212,
-        top: 1340,
+        top: 128,
       }}
-      data-label='PageLayout'
+      data-label='Playground'
     >
-      <PageLayout style={{}} />
-    </Scene>
-    <Scene
-      id='tag-scene'
-      commentId='tag-scene'
-      style={{
-        width: 110,
-        height: 44,
-        position: 'absolute',
-        left: 212,
-        top: 1800,
-      }}
-      data-label='Tag'
-    >
-      <Tag style={{}} />
-    </Scene>
-    <Scene
-      id='button-scene'
-      commentId='button-scene'
-      style={{
-        width: 120,
-        height: 40,
-        position: 'absolute',
-        left: 600,
-        top: 1200,
-      }}
-      data-label='Button (UI)'
-    >
-      <Button style={{}} />
+      <Playground style={{}} />
     </Scene>
     <Scene
       id='aboutpage-scene'
@@ -95,7 +67,7 @@ export var storyboard = (
       }}
       data-label='CaseStudyDetail'
     >
-      <CaseStudyDetail style={{}} />
+      <CaseStudyDetail slug="sample-case-study" />
     </Scene>
     <Scene
       id='contactpage-scene'
@@ -126,18 +98,64 @@ export var storyboard = (
       <PortfolioPage style={{}} />
     </Scene>
     <Scene
-      id='playground-scene'
-      commentId='playground-scene'
+      id='navigation-scene'
+      commentId='navigation-scene'
       style={{
-        width: 700,
-        height: 759,
+        width: 800,
+        height: 80,
         position: 'absolute',
         left: 212,
-        top: 128,
+        top: 1200,
       }}
-      data-label='Playground'
+      data-label='Navigation'
     >
-      <Playground style={{}} />
+      <Navigation style={{}} />
+    </Scene>
+    <Scene
+      id='pagelayout-scene'
+      commentId='pagelayout-scene'
+      style={{
+        width: 600,
+        height: 400,
+        position: 'absolute',
+        left: 212,
+        top: 1400,
+      }}
+      data-label='PageLayout'
+    >
+      <PageLayout style={{}} title="Sample Title">
+        <div>Sample content</div>
+      </PageLayout>
+    </Scene>
+    <Scene
+      id='tag-scene'
+      commentId='tag-scene'
+      style={{
+        width: 110,
+        height: 44,
+        position: 'absolute',
+        left: 212,
+        top: 1920,
+      }}
+      data-label='Tag'
+    >
+      <Tag>Tag label</Tag>
+    </Scene>
+    <Scene
+      id='button-scene'
+      commentId='button-scene'
+      style={{
+        width: 120,
+        height: 40,
+        position: 'absolute',
+        left: 600,
+        top: 1200,
+      }}
+      data-label='Button (UI)'
+    >
+      <Button style={{}} onClick={() => {}}>
+        Click Me
+      </Button>
     </Scene>
   </Storyboard>
 )

@@ -24,8 +24,8 @@ const AUTO_SIZE_COMPONENTS = true;
 
 // Vertical layout settings for components
 const VERTICAL_LAYOUT = true;
-const VERTICAL_SPACING = 60; // Space between vertically stacked components
-const HORIZONTAL_COLUMN_SPACING = 300; // Space between component columns
+const VERTICAL_SPACING = 120; // Doubled from 60 to 120 - Space between vertically stacked components
+const HORIZONTAL_COLUMN_SPACING = 900; // Tripled from 300 to 900 - Space between component columns
 const SUB_FOLDER_COLUMN_LEFT = 600; // Left position for the first subfolder column
 
 // File patterns that should be included even if they match ignore patterns
@@ -760,11 +760,24 @@ function generateStoryboard(components, existingScenes = null) {
     content += `      data-label='${sceneConfig.label}'\n`;
     content += `    >\n`;
     
-    // Add style prop directly if component accepts it
-    if (component.hasStyleProp) {
-      content += `      <${component.name} style={{}} />\n`;
+    // Add component rendering with proper props based on component name
+    const componentName = component.name;
+    if (componentName === 'PageLayout') {
+      content += `      <${componentName} style={{}} title="Sample Title">\n`;
+      content += `        <div>Sample content</div>\n`;
+      content += `      </${componentName}>\n`;
+    } else if (componentName === 'Tag') {
+      content += `      <${componentName}>Tag label</${componentName}>\n`;
+    } else if (componentName === 'Button') {
+      content += `      <${componentName} style={{}} onClick={() => {}}>\n`;
+      content += `        Click Me\n`;
+      content += `      </${componentName}>\n`;
+    } else if (componentName === 'CaseStudyDetail') {
+      content += `      <${componentName} slug="sample-case-study" />\n`;
+    } else if (component.hasStyleProp) {
+      content += `      <${componentName} style={{}} />\n`;
     } else {
-      content += `      <${component.name} />\n`;
+      content += `      <${componentName} />\n`;
     }
     
     content += `    </Scene>\n`;
