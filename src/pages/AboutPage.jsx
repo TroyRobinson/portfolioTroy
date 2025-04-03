@@ -1,8 +1,6 @@
 import React from 'react';
-import * as Avatar from '@radix-ui/react-avatar';
 import { FlexCol, FlexRow } from '../utils.jsx';
 import { Tag } from '../components/Tag.jsx';
-import Navigation from '../components/Navigation.jsx';
 import { PageLayout } from '../components/PageLayout.jsx';
 
 const AboutPage = ({ style }) => {

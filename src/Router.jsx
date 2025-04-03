@@ -1,5 +1,5 @@
 import React from 'react';
 import { Route, Link, Router, useLocation, useRoute, Switch } from 'wouter';
 
-// Export Wouter's components and hooks directly
+// Re-export Wouter's components and hooks
 export { Route, Link, Router, Switch, useLocation, useRoute }; 

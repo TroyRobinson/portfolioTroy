@@ -4,9 +4,11 @@ import { FlexCol, FlexRow } from '../utils.jsx';
 import Navigation from './Navigation.jsx';
 
 /**
- * PageLayout component
- * @component
- * @preferred-size 600x400
+ * Main layout component for all pages
+ * @param {Object} props - Component props
+ * @param {React.ReactNode} props.children - Page content
+ * @param {string} props.title - Page title
+ * @param {Object} props.style - Additional styles
  */
 export const PageLayout = ({ children, title = 'Welcome', style }) => {
   return (

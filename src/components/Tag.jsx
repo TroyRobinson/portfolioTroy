@@ -1,6 +1,9 @@
 import React from 'react';
 
-export const Tag = ({ children }) => {
+/**
+ * A styled tag/badge component for displaying labels
+ */
+export const Tag = ({ children, style = {} }) => {
   return (
     <span
       style={{
@@ -11,7 +14,8 @@ export const Tag = ({ children }) => {
         fontSize: '0.8rem',
         marginRight: '8px',
         marginBottom: '8px',
-        display: 'inline-block'
+        display: 'inline-block',
+        ...style
       }}
     >
       {children}

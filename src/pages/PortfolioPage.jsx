@@ -4,8 +4,7 @@ import { Tag } from '../components/Tag.jsx';
 import { PageLayout } from '../components/PageLayout.jsx';
 import { Link } from '../Router.jsx';
 
-// Pre-import the InstantDB module to reduce initial loading time
-// This makes the dynamic import faster when the component mounts
+// Pre-import InstantDB to reduce initial loading time
 const instantdbImport = import("https://esm.sh/@instantdb/core@0.17.31");
 
 // Simple spinner component
@@ -29,7 +28,7 @@ const Spinner = () => (
   </div>
 );
 
-// Sample dummy data
+// Sample case studies data
 const SAMPLE_CASE_STUDIES = [
   {
     name: "E-Commerce Platform",
@@ -68,7 +67,7 @@ const SAMPLE_CASE_STUDIES = [
   }
 ];
 
-// Generate a random ID with a prefix
+// Generate a unique ID with optional prefix
 const generateUniqueId = (prefix = '') => {
   return `${prefix}${Math.random().toString(36).substring(2, 10)}-${Date.now().toString(36)}`;
 };
@@ -85,9 +84,7 @@ const PortfolioPage = ({ style }) => {
   const [dummyDataLoaded, setDummyDataLoaded] = React.useState(false);
   const [isClearing, setIsClearing] = React.useState(false);
   const [status, setStatus] = React.useState('');
-  // Store app ID in state so we can generate a new one when resetting
   const [appId, setAppId] = React.useState("4a592307-cbd2-44e0-8818-d863e9e95399");
-  // Cache instant module
   const [instantModule, setInstantModule] = React.useState(null);
   
   // Form state
@@ -98,286 +95,17 @@ const PortfolioPage = ({ style }) => {
     date: ''
   });
 
-  // Function to add sample data
-  const addSampleData = React.useCallback(async () => {
-    if (!db || !instantModule) {
-      console.log("Cannot add sample data: Database or module not initialized");
-      return false;
-    }
-    
-    try {
-      setIsClearing(true);
-      setStatus("Adding sample case studies...");
-      console.log("Adding sample case studies...");
-      
-      // Use a single transaction to add all case studies at once
-      const { id } = instantModule;
-      const transactions = SAMPLE_CASE_STUDIES.map((study, index) => {
-        // Use a consistent ID based on index
-        const studyId = `sample-${index}`;
-        return db.database.tx.caseStudies[studyId].update({
-          name: study.name,
-          description: study.description,
-          technologies: study.technologies,
-          date: study.date,
-          createdAt: study.createdAt
-        });
-      });
-      
-      // Execute all in a single transact call
-      await db.database.transact(...transactions);
-      
-      setStatus("Sample data added successfully!");
-      console.log("Sample data added successfully");
-      setDummyDataLoaded(true);
-      
-      // Clear status after 3 seconds (reduced from 8)
-      setTimeout(() => {
-        setStatus('');
-      }, 3000);
-      
-      return true;
-      
-    } catch (err) {
-      console.error("Error adding sample data:", err);
-      setError("Error adding sample data: " + err.message);
-      setStatus("Error adding sample data");
-      
-      // Clear status after 3 seconds
-      setTimeout(() => {
-        setStatus('');
-      }, 3000);
-      
-      return false;
-    } finally {
-      setIsClearing(false);
-    }
-  }, [db, instantModule]);
-
-  // Function to continuously delete all data until none remains
-  const deleteAllData = React.useCallback(async (loadSampleDataAfter = false) => {
-    if (!db) {
-      console.log("Cannot delete data: Database not initialized");
-      return;
-    }
-    
-    try {
-      setIsClearing(true);
-      setError(null);
-      setStatus("Starting database cleanup...");
-      console.log("Starting full database cleanup...");
-      
-      // Function to keep deleting until no case studies remain
-      const deleteUntilEmpty = async (maxAttempts = 50) => {
-        // Get fresh data
-        const refreshData = () => {
-          return new Promise(resolve => {
-            db.database.subscribeQuery({ caseStudies: {} }, (resp) => {
-              if (resp.data) {
-                resolve(resp.data.caseStudies || []);
-              } else {
-                resolve([]);
-              }
-            });
-          });
-        };
-        
-        let remaining = await refreshData();
-        
-        // If there are records to delete, delete them all in one go if possible
-        if (remaining.length > 0) {
-          try {
-            const deleteTransactions = remaining.map(study => 
-              db.database.tx.caseStudies[study.id].delete()
-            );
-            
-            await db.database.transact(...deleteTransactions);
-            console.log(`Deleted all ${remaining.length} studies in one batch`);
-          } catch (err) {
-            console.error("Error in batch deletion:", err);
-            // Fall back to individual deletion
-            for (let study of remaining) {
-              try {
-                await db.database.transact(
-                  db.database.tx.caseStudies[study.id].delete()
-                );
-              } catch (innerErr) {
-                console.error(`Failed to delete study ${study.id}:`, innerErr);
-              }
-            }
-          }
-        }
-        
-        // Check if any remain
-        remaining = await refreshData();
-        return remaining.length === 0;
-      };
-      
-      const success = await deleteUntilEmpty();
-      if (success) {
-        setDummyDataLoaded(false);
-        setCaseStudies([]);
-        
-        // If requested, load sample data after successful deletion
-        if (loadSampleDataAfter) {
-          setStatus("Deletion complete. Adding sample data...");
-          console.log("Deletion successful, now adding sample data...");
-          await addSampleData();
-          setStatus("Process complete. Sample data added successfully!");
-        } else {
-          setStatus("Database cleared successfully!");
-        }
-      } else {
-        setError("Failed to delete all case studies. Try the reset button instead.");
-        setStatus("Deletion failed. Some records could not be deleted.");
-      }
-      
-    } catch (err) {
-      console.error("Error in delete operation:", err);
-      setError("Error deleting data: " + err.message);
-      setStatus("Error occurred during deletion process.");
-    } finally {
-      setIsClearing(false);
-      
-      // Clear status after 3 seconds (reduced from 8)
-      setTimeout(() => {
-        setStatus('');
-      }, 3000);
-    }
-  }, [db, addSampleData]);
-
-  // Function to completely reset the database with fresh sample data
-  const resetDatabase = React.useCallback(async () => {
-    if (!instantModule) {
-      console.error("Cannot reset: InstantDB module not loaded");
-      return;
-    }
-    
-    try {
-      setIsClearing(true);
-      setError(null);
-      setStatus("🔄 Creating fresh database instance...");
-      console.log("🔄 RESET: Creating fresh database instance with sample data");
-      
-      // Reset all state
-      setDb(null);
-      setCaseStudies([]);
-      setDummyDataLoaded(false);
-      setLoading(true);
-      
-      // Clear any stored data
-      localStorage.clear();
-      console.log("Local storage cleared");
-      
-      // Generate a new app ID to force a completely new database instance
-      const newAppId = generateUniqueId('portfolio-');
-      setAppId(newAppId);
-      console.log(`Generated new app ID: ${newAppId}`);
-      
-      // Extract the required functions from the cached module
-      const { init, i, id } = instantModule;
-      
-      // Declare schema
-      const schema = i.schema({
-        entities: {
-          caseStudies: i.entity({
-            name: i.string(),
-            description: i.string(),
-            technologies: i.string(),
-            date: i.string(),
-            createdAt: i.date(),
-          }),
-        },
-      });
-
-      // Initialize the database with new app ID
-      console.log("Initializing InstantDB with appId:", newAppId);
-      const database = init({ 
-        appId: newAppId, 
-        schema,
-      });
-
-      console.log("New database initialized");
-      
-      // Set the database in state
-      setDb({ database, id });
-      
-      // Subscribe to data with optimized callback
-      database.subscribeQuery({ caseStudies: {} }, (resp) => {
-        if (resp.error) {
-          console.error("Subscription error:", resp.error);
-          setError(resp.error.message);
-          setLoading(false);
-          return;
-        }
-        
-        if (resp.data) {
-          const receivedCaseStudies = resp.data.caseStudies || [];
-          setCaseStudies(receivedCaseStudies);
-          setLoading(false);
-          
-          // If database is empty, add sample data - but only do this once
-          if (receivedCaseStudies.length === 0 && !dummyDataLoaded) {
-            console.log("Adding sample data to fresh database...");
-            
-            // Batch all transactions into a single call
-            const addSampleDataBatch = async () => {
-              const transactions = SAMPLE_CASE_STUDIES.map((study, index) => {
-                const studyId = `sample-${index}`;
-                return database.tx.caseStudies[studyId].update({
-                  name: study.name,
-                  description: study.description,
-                  technologies: study.technologies,
-                  date: study.date,
-                  createdAt: study.createdAt
-                });
-              });
-              
-              try {
-                await database.transact(...transactions);
-                console.log("Sample data added successfully");
-                setDummyDataLoaded(true);
-              } catch (err) {
-                console.error("Error adding sample data in batch:", err);
-              }
-            };
-            
-            // Start adding sample data after a small delay
-            setTimeout(addSampleDataBatch, 100);
-          }
-        }
-      });
-      
-    } catch (err) {
-      console.error("Error resetting database:", err);
-      setError("Error resetting database: " + err.message);
-      setStatus("Error resetting database.");
-      setLoading(false);
-    } finally {
-      setIsClearing(false);
-      
-      setTimeout(() => {
-        setStatus('');
-      }, 3000);
-    }
-  }, [dummyDataLoaded, instantModule]);
-
-  // Initialize InstantDB on first load - using the pre-imported module
+  // Initialize InstantDB on first load
   React.useEffect(() => {
     const initializeDb = async () => {
       try {
-        // Use the pre-imported module or fetch it if not already fetched
+        // Use the pre-imported module
         const module = await instantdbImport;
-        
-        console.log("InstantDB module loaded:", module);
-        
-        // Cache the module in state to avoid re-importing later
         setInstantModule(module);
         
-        // Extract the required functions
         const { init, i, id } = module;
         
-        // Declare schema
+        // Schema definition
         const schema = i.schema({
           entities: {
             caseStudies: i.entity({
@@ -390,20 +118,17 @@ const PortfolioPage = ({ style }) => {
           },
         });
 
-        // Initialize the database with better connection options
         console.log("Initializing InstantDB with appId:", appId);
         const database = init({ 
           appId, 
           schema,
-          // Optimize connection settings
           persistence: true,
-          batchingInterval: 50, // Faster batching 
+          batchingInterval: 50, 
         });
 
-        console.log("Database initialized");
         setDb({ database, id });
         
-        // Subscribe to data with an optimized query
+        // Subscribe to case studies data
         database.subscribeQuery({ caseStudies: {} }, (resp) => {
           if (resp.error) {
             console.error("Subscription error:", resp.error);
@@ -413,8 +138,7 @@ const PortfolioPage = ({ style }) => {
           }
           
           if (resp.data) {
-            const receivedCaseStudies = resp.data.caseStudies || [];
-            setCaseStudies(receivedCaseStudies);
+            setCaseStudies(resp.data.caseStudies || []);
             setLoading(false);
           }
         });
@@ -429,11 +153,204 @@ const PortfolioPage = ({ style }) => {
     initializeDb();
   }, [appId]);
 
-  // Case Studies operations
+  // Add sample case studies to the database
+  const addSampleData = React.useCallback(async () => {
+    if (!db || !instantModule) return false;
+    
+    try {
+      setIsClearing(true);
+      setStatus("Adding sample case studies...");
+      
+      // Create a single transaction for all sample data
+      const { id } = instantModule;
+      const transactions = SAMPLE_CASE_STUDIES.map((study, index) => {
+        const studyId = `sample-${index}`;
+        return db.database.tx.caseStudies[studyId].update({
+          name: study.name,
+          description: study.description,
+          technologies: study.technologies,
+          date: study.date,
+          createdAt: study.createdAt
+        });
+      });
+      
+      await db.database.transact(...transactions);
+      
+      setStatus("Sample data added successfully!");
+      setDummyDataLoaded(true);
+      
+      setTimeout(() => setStatus(''), 3000);
+      return true;
+    } catch (err) {
+      console.error("Error adding sample data:", err);
+      setError("Error adding sample data: " + err.message);
+      setStatus("Error adding sample data");
+      setTimeout(() => setStatus(''), 3000);
+      return false;
+    } finally {
+      setIsClearing(false);
+    }
+  }, [db, instantModule]);
+
+  // Delete all data from the database
+  const deleteAllData = React.useCallback(async (loadSampleDataAfter = false) => {
+    if (!db) return;
+    
+    try {
+      setIsClearing(true);
+      setError(null);
+      setStatus("Starting database cleanup...");
+      
+      // Get all case studies
+      const refreshData = () => {
+        return new Promise(resolve => {
+          db.database.subscribeQuery({ caseStudies: {} }, (resp) => {
+            if (resp.data) {
+              resolve(resp.data.caseStudies || []);
+            } else {
+              resolve([]);
+            }
+          });
+        });
+      };
+      
+      const remaining = await refreshData();
+      
+      if (remaining.length > 0) {
+        // Batch delete all studies at once
+        const deleteTransactions = remaining.map(study => 
+          db.database.tx.caseStudies[study.id].delete()
+        );
+        
+        await db.database.transact(...deleteTransactions);
+      }
+      
+      // Check if any remain
+      const checkRemaining = await refreshData();
+      if (checkRemaining.length === 0) {
+        setDummyDataLoaded(false);
+        setCaseStudies([]);
+        
+        if (loadSampleDataAfter) {
+          setStatus("Deletion complete. Adding sample data...");
+          await addSampleData();
+        } else {
+          setStatus("Database cleared successfully!");
+        }
+      } else {
+        setError("Failed to delete all case studies. Try the reset button instead.");
+        setStatus("Deletion failed. Some records could not be deleted.");
+      }
+    } catch (err) {
+      console.error("Error in delete operation:", err);
+      setError("Error deleting data: " + err.message);
+      setStatus("Error occurred during deletion process.");
+    } finally {
+      setIsClearing(false);
+      setTimeout(() => setStatus(''), 3000);
+    }
+  }, [db, addSampleData]);
+
+  // Completely reset the database with a new instance
+  const resetDatabase = React.useCallback(async () => {
+    if (!instantModule) return;
+    
+    try {
+      setIsClearing(true);
+      setError(null);
+      setStatus("🔄 Creating fresh database instance...");
+      
+      // Reset all state
+      setDb(null);
+      setCaseStudies([]);
+      setDummyDataLoaded(false);
+      setLoading(true);
+      
+      // Clear local storage
+      localStorage.clear();
+      
+      // Generate a new app ID for a fresh database
+      const newAppId = generateUniqueId('portfolio-');
+      setAppId(newAppId);
+      
+      // Initialize new database with the fresh app ID
+      const { init, i, id } = instantModule;
+      
+      const schema = i.schema({
+        entities: {
+          caseStudies: i.entity({
+            name: i.string(),
+            description: i.string(),
+            technologies: i.string(),
+            date: i.string(),
+            createdAt: i.date(),
+          }),
+        },
+      });
+
+      const database = init({ 
+        appId: newAppId, 
+        schema,
+      });
+      
+      setDb({ database, id });
+      
+      // Subscribe to data
+      database.subscribeQuery({ caseStudies: {} }, (resp) => {
+        if (resp.error) {
+          console.error("Subscription error:", resp.error);
+          setError(resp.error.message);
+          setLoading(false);
+          return;
+        }
+        
+        if (resp.data) {
+          const receivedCaseStudies = resp.data.caseStudies || [];
+          setCaseStudies(receivedCaseStudies);
+          setLoading(false);
+          
+          // Add sample data if database is empty
+          if (receivedCaseStudies.length === 0 && !dummyDataLoaded) {
+            const addSampleDataBatch = async () => {
+              const transactions = SAMPLE_CASE_STUDIES.map((study, index) => {
+                const studyId = `sample-${index}`;
+                return database.tx.caseStudies[studyId].update({
+                  name: study.name,
+                  description: study.description,
+                  technologies: study.technologies,
+                  date: study.date,
+                  createdAt: study.createdAt
+                });
+              });
+              
+              try {
+                await database.transact(...transactions);
+                setDummyDataLoaded(true);
+              } catch (err) {
+                console.error("Error adding sample data in batch:", err);
+              }
+            };
+            
+            setTimeout(addSampleDataBatch, 100);
+          }
+        }
+      });
+      
+    } catch (err) {
+      console.error("Error resetting database:", err);
+      setError("Error resetting database: " + err.message);
+      setStatus("Error resetting database.");
+      setLoading(false);
+    } finally {
+      setIsClearing(false);
+      setTimeout(() => setStatus(''), 3000);
+    }
+  }, [dummyDataLoaded, instantModule]);
+
+  // Case study CRUD operations
   const addCaseStudy = () => {
     if (!db) return;
     
-    console.log("Adding case study:", newCaseStudy);
     db.database.transact(
       db.database.tx.caseStudies[db.id()].update({
         name: newCaseStudy.name,
@@ -444,31 +361,24 @@ const PortfolioPage = ({ style }) => {
       })
     );
 
-    // Reset form
+    // Reset form and close dialog
     setNewCaseStudy({
       name: '',
       description: '',
       technologies: '',
       date: ''
     });
-    
-    // Close dialog
     setDialogOpen(false);
   };
 
   const deleteCaseStudy = (caseStudy) => {
     if (!db) return;
-    
-    console.log("Deleting case study:", caseStudy.id);
     db.database.transact(db.database.tx.caseStudies[caseStudy.id].delete());
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewCaseStudy(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setNewCaseStudy(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e) => {
@@ -478,29 +388,25 @@ const PortfolioPage = ({ style }) => {
     }
   };
 
-  // Sort case studies by createdAt (newest first)
+  // Sort case studies by creation date (oldest first)
   const sortedCaseStudies = [...caseStudies].sort((a, b) => {
-    // Use createdAt for sorting, with fallback to date if createdAt is missing
     const timeA = a.createdAt || (a.date ? new Date(a.date).getTime() : 0);
     const timeB = b.createdAt || (b.date ? new Date(b.date).getTime() : 0);
-    return timeA - timeB; // Sort in ascending order (oldest first) to match JSON order
+    return timeA - timeB;
   });
 
-  // Function to open the bulk edit modal
+  // Bulk edit functions
   const openBulkEdit = () => {
-    // Start with the sample data if no case studies exist
     const dataToEdit = caseStudies.length > 0 
-      ? caseStudies.map(({ id, ...rest }) => rest) // Remove DB IDs
+      ? caseStudies.map(({ id, ...rest }) => rest)
       : SAMPLE_CASE_STUDIES;
     
-    // Convert to formatted JSON string
-    const jsonString = JSON.stringify(dataToEdit, null, 2);
-    setBulkEditJson(jsonString);
+    setBulkEditJson(JSON.stringify(dataToEdit, null, 2));
     setJsonError(null);
     setBulkEditOpen(true);
   };
 
-  // Function to validate the JSON input
+  // Validate JSON format for bulk editing
   const validateJson = (jsonString) => {
     try {
       const parsed = JSON.parse(jsonString);
@@ -509,7 +415,7 @@ const PortfolioPage = ({ style }) => {
         return { valid: false, error: "JSON must be an array of case studies" };
       }
       
-      // Check if each item has the required fields
+      // Validate required fields
       for (let i = 0; i < parsed.length; i++) {
         const item = parsed[i];
         if (!item.name) {
@@ -526,14 +432,14 @@ const PortfolioPage = ({ style }) => {
     }
   };
 
-  // Function to sync the database with the edited JSON
+  // Sync database with bulk edited JSON data
   const syncWithEditedJson = async (jsonString) => {
     if (!db) {
       setError("Database not initialized");
       return false;
     }
     
-    // Validate the JSON
+    // Validate JSON data
     const validation = validateJson(jsonString);
     if (!validation.valid) {
       setJsonError(validation.error);
@@ -545,93 +451,39 @@ const PortfolioPage = ({ style }) => {
     setStatus("Syncing database with edited JSON...");
     
     try {
-      // Delete all existing case studies
-      const deleteAll = async () => {
-        // Get all case studies
-        const allStudies = await new Promise(resolve => {
-          db.database.subscribeQuery({ caseStudies: {} }, (resp) => {
-            if (resp.data) {
-              resolve(resp.data.caseStudies || []);
-            } else {
-              resolve([]);
-            }
-          });
-        });
-        
-        if (allStudies.length > 0) {
-          setStatus(`Clearing ${allStudies.length} existing case studies...`);
-          
-          // Delete one at a time to avoid transaction validation issues
-          for (let i = 0; i < allStudies.length; i++) {
-            const study = allStudies[i];
-            try {
-              await db.database.transact(
-                db.database.tx.caseStudies[study.id].delete()
-              );
-              setStatus(`Deleted ${i + 1} of ${allStudies.length} case studies...`);
-            } catch (err) {
-              console.error(`Error deleting study ${study.id}:`, err);
-              // Continue with next study even if one fails
-            }
-            
-            // Reduced delay between deletes (from 100ms to 50ms)
-            await new Promise(resolve => setTimeout(resolve, 50));
-          }
-        }
-        
-        return true;
-      };
-      
-      // Delete all existing data
-      await deleteAll();
+      // Clear existing data first
+      await deleteAllData(false);
       
       // Add the new case studies from the JSON
       const newStudies = validation.data;
       setStatus(`Adding ${newStudies.length} case studies from edited JSON...`);
       
-      // Process each study one at a time, exactly matching addCaseStudy's pattern
-      for (let i = 0; i < newStudies.length; i++) {
-        const study = newStudies[i];
+      // Create all transactions
+      const transactions = newStudies.map((study, index) => {
+        const baseTimestamp = Date.now();
+        const orderPreservingTimestamp = baseTimestamp - (newStudies.length - index) * 1000;
         
-        try {
-          // Use db.id() exactly as done in addCaseStudy
-          // Set createdAt to a timestamp that preserves the order from the JSON
-          // Using a base timestamp and adding the index to maintain order
-          const baseTimestamp = Date.now();
-          const orderPreservingTimestamp = baseTimestamp - (newStudies.length - i) * 1000;
-          
-          await db.database.transact(
-            db.database.tx.caseStudies[db.id()].update({
-              name: study.name,
-              description: study.description || '',
-              technologies: study.technologies,
-              date: study.date || new Date().toISOString().split('T')[0],
-              createdAt: orderPreservingTimestamp,
-            })
-          );
-          
-          setStatus(`Added ${i+1} of ${newStudies.length} case studies...`);
-        } catch (err) {
-          console.error(`Error adding study ${i+1}:`, err);
-          setError(`Error adding study ${i+1}: ${err.message}`);
-          
-          // Log more details about the study causing the error
-          console.error("Study data causing error:", study);
-        }
-        
-        // Reduced delay between adds (from 300ms to 100ms)
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
+        return db.database.tx.caseStudies[db.id()].update({
+          name: study.name,
+          description: study.description || '',
+          technologies: study.technologies,
+          date: study.date || new Date().toISOString().split('T')[0],
+          createdAt: orderPreservingTimestamp,
+        });
+      });
+      
+      // Execute all transactions in one batch
+      await db.database.transact(...transactions);
       
       setStatus("Database successfully synchronized with edited JSON!");
-      setTimeout(() => setStatus(''), 5000);
+      setTimeout(() => setStatus(''), 3000);
       
       return true;
     } catch (err) {
       console.error("Error syncing with edited JSON:", err);
       setError(`Error syncing with edited JSON: ${err.message}`);
       setStatus("Error occurred during database sync.");
-      setTimeout(() => setStatus(''), 5000);
+      setTimeout(() => setStatus(''), 3000);
       
       return false;
     } finally {
@@ -645,11 +497,11 @@ const PortfolioPage = ({ style }) => {
       <FlexCol style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
         <FlexRow style={{ justifyContent: 'space-between', alignItems: 'center', padding: '0 0 20px 0' }}>
           <FlexCol style={{ gap: '5px' }}>
-          <div style={{ fontSize: '0.9rem', color: '#666' }}>
-            {loading 
-              ? <><Spinner /> Loading...</>
-              : `${caseStudies.length} case studies loaded`}
-          </div>
+            <div style={{ fontSize: '0.9rem', color: '#666' }}>
+              {loading 
+                ? <><Spinner /> Loading...</>
+                : `${caseStudies.length} case studies loaded`}
+            </div>
             {status && (
               <div style={{ 
                 fontSize: '0.9rem', 
@@ -689,24 +541,24 @@ const PortfolioPage = ({ style }) => {
               </button>
             )}
           
-          <button
-            onClick={() => setDialogOpen(true)}
+            <button
+              onClick={() => setDialogOpen(true)}
               disabled={isClearing || loading}
-            style={{
-              backgroundColor: '#2b6cb0',
-              color: 'white',
-              padding: '10px 15px',
-              borderRadius: '4px',
-              border: 'none',
+              style={{
+                backgroundColor: '#2b6cb0',
+                color: 'white',
+                padding: '10px 15px',
+                borderRadius: '4px',
+                border: 'none',
                 cursor: (isClearing || loading) ? 'not-allowed' : 'pointer',
-              fontWeight: 'bold',
+                fontWeight: 'bold',
                 fontSize: '0.9rem',
                 opacity: (isClearing || loading) ? 0.7 : 1
-            }}
-          >
-            Add New Case Study
-          </button>
-        </FlexRow>
+              }}
+            >
+              Add New Case Study
+            </button>
+          </FlexRow>
         </FlexRow>
         
         {error && (
@@ -820,6 +672,7 @@ const PortfolioPage = ({ style }) => {
           </div>
         )}
         
+        {/* Add New Case Study Modal */}
         {dialogOpen && (
           <div style={{
             position: 'fixed',
@@ -952,6 +805,7 @@ const PortfolioPage = ({ style }) => {
           </div>
         )}
         
+        {/* Case Studies List */}
         <FlexCol style={{ gap: '15px' }}>
           {sortedCaseStudies.map(study => (
             <div key={study.id} style={{ 

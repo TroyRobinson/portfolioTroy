@@ -5,14 +5,14 @@ import PortfolioPage from './pages/PortfolioPage.jsx';
 import ContactPage from './pages/ContactPage.jsx';
 import CaseStudyDetail from './pages/CaseStudyDetail.jsx';
 
-// Main App component
+/**
+ * Main application component with global styles
+ */
 export const App = () => {
-  // Apply global styles to handle scrollbar consistency
+  // Apply global styles
   useEffect(() => {
-    // Create a style element
     const style = document.createElement('style');
     
-    // Add CSS to make scrollbars consistent
     style.textContent = `
       html {
         overflow-y: scroll;
@@ -49,13 +49,9 @@ export const App = () => {
       }
     `;
     
-    // Add the style to document head
     document.head.appendChild(style);
     
-    // Clean up when component unmounts
-    return () => {
-      document.head.removeChild(style);
-    };
+    return () => document.head.removeChild(style);
   }, []);
 
   return (
@@ -65,7 +61,9 @@ export const App = () => {
   );
 };
 
-// Separate component for the app content to use the router context
+/**
+ * App routing configuration
+ */
 const AppContent = () => {
   return (
     <Switch>

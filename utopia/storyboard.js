@@ -27,31 +27,11 @@ export var storyboard = (
     >
       <>
         {/* Simplified App preview for storyboard */}
-        <div
-          style={{
-            padding: '20px',
-            height: '100%',
-            overflow: 'auto',
-          }}
-        >
-          <div
-            style={{
-              border: '1px dashed #ccc',
-              padding: '15px',
-              borderRadius: '4px',
-              marginBottom: '15px',
-            }}
-          >
-            <h3 style={{ margin: '0 0 10px 0' }}>
-              App Component
-            </h3>
-            <p style={{ margin: '0 0 10px 0' }}>
-              This component contains a Router with the
-              following routes:
-            </p>
-            <ul
-              style={{ margin: '0', paddingLeft: '20px' }}
-            >
+        <div style={{ padding: '20px', height: '100%', overflow: 'auto' }}>
+          <div style={{ border: '1px dashed #ccc', padding: '15px', borderRadius: '4px', marginBottom: '15px' }}>
+            <h3 style={{ margin: '0 0 10px 0' }}>App Component</h3>
+            <p style={{ margin: '0 0 10px 0' }}>This component contains a Router with the following routes:</p>
+            <ul style={{ margin: '0', paddingLeft: '20px' }}>
               <li>/ → AboutPage</li>
               <li>/portfolio → PortfolioPage</li>
               <li>/portfolio/:slug → CaseStudyDetail</li>
@@ -60,76 +40,6 @@ export var storyboard = (
           </div>
         </div>
       </>
-    </Scene>
-    <Scene
-      id='playground-scene'
-      commentId='playground-scene'
-      style={{
-        width: 700,
-        height: 759,
-        position: 'absolute',
-        left: 212,
-        top: 128,
-      }}
-      data-label='Playground'
-    >
-      <Playground style={{}}>Playground Content</Playground>
-    </Scene>
-    <Scene
-      id='aboutpage-scene'
-      commentId='aboutpage-scene'
-      style={{
-        width: 700,
-        height: 700,
-        position: 'absolute',
-        left: 1808,
-        top: 128,
-      }}
-      data-label='AboutPage'
-    >
-      <AboutPage style={{}} />
-    </Scene>
-    <Scene
-      id='casestudydetail-scene'
-      commentId='casestudydetail-scene'
-      style={{
-        width: 700,
-        height: 700,
-        position: 'absolute',
-        left: 2624,
-        top: 128,
-      }}
-      data-label='CaseStudyDetail'
-    >
-      <CaseStudyDetail slug='sample-case-study' />
-    </Scene>
-    <Scene
-      id='contactpage-scene'
-      commentId='contactpage-scene'
-      style={{
-        width: 700,
-        height: 700,
-        position: 'absolute',
-        left: 3440,
-        top: 128,
-      }}
-      data-label='ContactPage'
-    >
-      <ContactPage style={{}} />
-    </Scene>
-    <Scene
-      id='portfoliopage-scene'
-      commentId='portfoliopage-scene'
-      style={{
-        width: 700,
-        height: 700,
-        position: 'absolute',
-        left: 4256,
-        top: 128,
-      }}
-      data-label='PortfolioPage'
-    >
-      <PortfolioPage style={{}} />
     </Scene>
     <Scene
       id='navigation-scene'
@@ -157,7 +67,7 @@ export var storyboard = (
       }}
       data-label='PageLayout'
     >
-      <PageLayout style={{}} title='Sample Title'>
+      <PageLayout style={{}} title="Sample Title">
         <div>Sample content</div>
       </PageLayout>
     </Scene>
@@ -190,6 +100,78 @@ export var storyboard = (
       <Button style={{}} onClick={() => {}}>
         Click Me
       </Button>
+    </Scene>
+    <Scene
+      id='aboutpage-scene'
+      commentId='aboutpage-scene'
+      style={{
+        width: 700,
+        height: 700,
+        position: 'absolute',
+        left: 1808,
+        top: 128,
+      }}
+      data-label='AboutPage'
+    >
+      <AboutPage style={{}} />
+    </Scene>
+    <Scene
+      id='casestudydetail-scene'
+      commentId='casestudydetail-scene'
+      style={{
+        width: 700,
+        height: 700,
+        position: 'absolute',
+        left: 2624,
+        top: 128,
+      }}
+      data-label='CaseStudyDetail'
+    >
+      <CaseStudyDetail slug="sample-case-study" />
+    </Scene>
+    <Scene
+      id='contactpage-scene'
+      commentId='contactpage-scene'
+      style={{
+        width: 700,
+        height: 700,
+        position: 'absolute',
+        left: 3440,
+        top: 128,
+      }}
+      data-label='ContactPage'
+    >
+      <ContactPage style={{}} />
+    </Scene>
+    <Scene
+      id='portfoliopage-scene'
+      commentId='portfoliopage-scene'
+      style={{
+        width: 700,
+        height: 700,
+        position: 'absolute',
+        left: 4256,
+        top: 128,
+      }}
+      data-label='PortfolioPage'
+    >
+      <PortfolioPage style={{}} />
+    </Scene>
+    <Scene
+      id='playground-scene'
+      commentId='playground-scene'
+      style={{
+        width: 700,
+        height: 759,
+        position: 'absolute',
+        left: 212,
+        top: 128,
+      }}
+      data-label='Playground'
+    >
+      <Playground style={{}}>
+        Playground Content
+      </Playground>
     </Scene>
   </Storyboard>
 )
