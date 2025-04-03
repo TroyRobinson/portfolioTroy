@@ -14,6 +14,7 @@ export const PageLayout = ({ children, title = 'Welcome', style }) => {
         padding: '20px',
         boxSizing: 'border-box',
         overflowX: 'hidden',
+        alignItems: 'flex-start',
         ...style
       }}
     >
@@ -22,9 +23,10 @@ export const PageLayout = ({ children, title = 'Welcome', style }) => {
         alignItems: 'center', 
         padding: '0 0 20px 0',
         flexWrap: 'wrap',
-        gap: '20px'
+        gap: '20px',
+        width: '100%'
       }}>
-        <FlexCol style={{}}>
+        <FlexCol style={{ alignItems: 'flex-start' }}>
           <h1 style={{ fontSize: '2.5rem', padding: '0 0 10px 0' }}>My Portfolio</h1>
           <p style={{ fontSize: '1.2rem', color: '#666' }}>Web Developer & Designer</p>
         </FlexCol>
@@ -57,13 +59,15 @@ export const PageLayout = ({ children, title = 'Welcome', style }) => {
         </Avatar.Root>
       </FlexRow>
       
-      <div style={{ height: '1px', backgroundColor: '#e0e0e0', margin: '0 0 20px 0' }} />
+      <div style={{ height: '1px', backgroundColor: '#e0e0e0', margin: '0 0 20px 0', width: '100%' }} />
       
-      <Navigation style={{}} />
+      <Navigation style={{ width: '100%', alignItems: 'flex-start' }} />
       
-      {title && <h2 style={{ fontSize: '1.8rem', padding: '20px 0' }}>{title}</h2>}
+      {title && <h2 style={{ fontSize: '1.8rem', padding: '20px 0', textAlign: 'left' }}>{title}</h2>}
       
-      {children}
+      <div style={{ width: '100%', alignItems: 'flex-start', alignSelf: 'flex-start', display: 'flex', flexDirection: 'column' }}>
+        {children}
+      </div>
     </FlexCol>
   );
 }; 

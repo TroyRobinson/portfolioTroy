@@ -87,7 +87,7 @@ const CaseStudyDetail = ({ slug }) => {
       style={{ minHeight: '100vh' }}
       title={caseStudy ? caseStudy.name : 'Loading Case Study...'}
     >
-      <FlexCol style={{ width: '100%', maxWidth: '900px', margin: '0 auto', padding: '20px' }}>
+      <FlexCol style={{ width: '100%', padding: '20px', alignItems: 'flex-start' }}>
         <Link href="/portfolio" style={{ 
           marginBottom: '20px', 
           color: '#2b6cb0', 
@@ -99,7 +99,7 @@ const CaseStudyDetail = ({ slug }) => {
         </Link>
         
         {loading && (
-          <div style={{ padding: '40px 0', textAlign: 'center' }}>
+          <div style={{ padding: '40px 0', width: '100%' }}>
             <Spinner /> Loading...
           </div>
         )}
@@ -110,7 +110,8 @@ const CaseStudyDetail = ({ slug }) => {
             backgroundColor: '#ffeeee', 
             padding: '15px', 
             border: '1px solid #ffcccc',
-            borderRadius: '4px' 
+            borderRadius: '4px',
+            width: '100%'
           }}>
             {error}
           </div>
