@@ -764,10 +764,14 @@ function generateStoryboard(components, existingScenes = null) {
     // Add component rendering with proper props based on component name
     const componentName = component.name;
     if (componentName === 'App') {
-      // Render AboutPage inside App to show realistic content
+      // Special handling for App component to show content in storyboard
       content += `      <${componentName}>\n`;
-      content += `        {/* The App uses Wouter Router, rendering AboutPage directly in storyboard */}\n`;
-      content += `        <AboutPage style={{}} />\n`;
+      content += `        {/* The App uses a Router, so we're forcing content display here */}\n`;
+      content += `        <div style={{ padding: '20px' }}>\n`;
+      content += `          <h1>Portfolio App</h1>\n`;
+      content += `          <p>This is a preview of the App component.</p>\n`;
+      content += `          <p>In the actual app, this would render the current route.</p>\n`;
+      content += `        </div>\n`;
       content += `      </${componentName}>\n`;
     } else if (componentName === 'PageLayout') {
       content += `      <${componentName} style={{}} title="Sample Title">\n`;
