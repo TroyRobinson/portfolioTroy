@@ -49,7 +49,7 @@ export var storyboard = (
         height: 700,
         position: 'absolute',
         left: 1808,
-        top: 600,
+        top: 128,
       }}
       data-label='AboutPage'
     >
@@ -63,7 +63,7 @@ export var storyboard = (
         height: 700,
         position: 'absolute',
         left: 2624,
-        top: 600,
+        top: 128,
       }}
       data-label='CaseStudyDetail'
     >
@@ -77,7 +77,7 @@ export var storyboard = (
         height: 700,
         position: 'absolute',
         left: 3440,
-        top: 600,
+        top: 128,
       }}
       data-label='ContactPage'
     >
@@ -91,7 +91,7 @@ export var storyboard = (
         height: 700,
         position: 'absolute',
         left: 4256,
-        top: 600,
+        top: 128,
       }}
       data-label='PortfolioPage'
     >
@@ -104,8 +104,8 @@ export var storyboard = (
         width: 800,
         height: 80,
         position: 'absolute',
-        left: 2000,
-        top: 128,
+        left: 212,
+        top: 1200,
       }}
       data-label='Navigation'
     >
@@ -115,11 +115,11 @@ export var storyboard = (
       id='pagelayout-scene'
       commentId='pagelayout-scene'
       style={{
-        width: 1200,
+        width: 100,
         height: 100,
         position: 'absolute',
-        left: 2600,
-        top: 128,
+        left: 212,
+        top: 1340,
       }}
       data-label='PageLayout'
     >
@@ -132,8 +132,8 @@ export var storyboard = (
         width: 110,
         height: 44,
         position: 'absolute',
-        left: 3200,
-        top: 128,
+        left: 212,
+        top: 1500,
       }}
       data-label='Tag'
     >
@@ -146,10 +146,10 @@ export var storyboard = (
         width: 120,
         height: 40,
         position: 'absolute',
-        left: 4000,
-        top: 128,
+        left: 600,
+        top: 1200,
       }}
-      data-label='Button'
+      data-label='Button (UI)'
     >
       <Button style={{}} />
     </Scene>
