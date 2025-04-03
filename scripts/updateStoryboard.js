@@ -25,8 +25,9 @@ const AUTO_SIZE_COMPONENTS = true;
 // Vertical layout settings for components
 const VERTICAL_LAYOUT = true;
 const VERTICAL_SPACING = 120; // Doubled from 60 to 120 - Space between vertically stacked components
-const HORIZONTAL_COLUMN_SPACING = 900; // Tripled from 300 to 900 - Space between component columns
-const SUB_FOLDER_COLUMN_LEFT = 600; // Left position for the first subfolder column
+const HORIZONTAL_COLUMN_SPACING = 936; // Distance between component columns (1148 - 212 = 936)
+const COMPONENT_COLUMN_TOP = 1584; // Starting top position for component columns
+const SUB_FOLDER_COLUMN_LEFT = 1148; // Left position for the first subfolder column (changed from 600)
 
 // File patterns that should be included even if they match ignore patterns
 const FORCE_INCLUDE = [
@@ -553,7 +554,7 @@ function generateStoryboard(components, existingScenes = null) {
   // Set up positions for vertical layouts
   // Column 1: Regular components (directly in components folder)
   const componentColumnLeft = 212;
-  let componentColumnTop = 1200; // Start position below the horizontal row
+  let componentColumnTop = COMPONENT_COLUMN_TOP; // Start position below the horizontal row
   
   // For subfolder columns, we'll position them to the right of the pages
   let currentSubfolderColumnIndex = 0;
@@ -673,7 +674,7 @@ function generateStoryboard(components, existingScenes = null) {
   Object.entries(subfolderGroups).forEach(([folder, folderComponents], folderIndex) => {
     // Calculate column position - fixed position rather than extending from pages
     const columnLeft = SUB_FOLDER_COLUMN_LEFT + (folderIndex * HORIZONTAL_COLUMN_SPACING);
-    let columnTop = 1200; // Start below the pages row
+    let columnTop = COMPONENT_COLUMN_TOP; // Start below the pages row
     
     console.log(`Creating column for ${folder} components at position ${columnLeft}`);
     
