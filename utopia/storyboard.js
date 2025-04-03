@@ -49,7 +49,7 @@ export var storyboard = (
         height: 700,
         position: 'absolute',
         left: 1808,
-        top: 128,
+        top: 600,
       }}
       data-label='AboutPage'
     >
@@ -63,7 +63,7 @@ export var storyboard = (
         height: 700,
         position: 'absolute',
         left: 2624,
-        top: 128,
+        top: 600,
       }}
       data-label='CaseStudyDetail'
     >
@@ -77,7 +77,7 @@ export var storyboard = (
         height: 700,
         position: 'absolute',
         left: 3440,
-        top: 128,
+        top: 600,
       }}
       data-label='ContactPage'
     >
@@ -91,7 +91,7 @@ export var storyboard = (
         height: 700,
         position: 'absolute',
         left: 4256,
-        top: 128,
+        top: 600,
       }}
       data-label='PortfolioPage'
     >

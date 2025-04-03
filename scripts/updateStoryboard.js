@@ -918,4 +918,4356 @@ Options:
         const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
         
         if (!hasExistingScene) {
-          console.log(`
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no longer exists in our scanned components, mark for removal
+        if (!componentNames.has(componentName)) {
+          sceneIdsToRemove.push(sceneId);
+          console.log(`Pruning scene ${sceneId} for removed component ${componentName}`);
+          
+          // Remove from existingScenes to prevent preservation
+          if (existingScenes[sceneId]) {
+            delete existingScenes[sceneId];
+          }
+        } else {
+          console.log(`Keeping scene ${sceneId} for component ${componentName}`);
+        }
+      }
+    }
+    
+    // Check for components that exist but don't have scenes in the storyboard
+    if (forceRegenMissing) {
+      for (const component of components) {
+        const expectedSceneId = `${component.name.toLowerCase()}-scene`;
+        
+        // If this component should have a scene but doesn't
+        const hasExistingScene = Object.keys(allExistingScenes).includes(expectedSceneId);
+        
+        if (!hasExistingScene) {
+          console.log(`Component ${component.name} exists but scene ${expectedSceneId} is missing - will regenerate`);
+          // Don't add to existingScenes here - let the generation logic place it properly
+        }
+      }
+    }
+    
+    console.log('Generating storyboard...');
+    
+    // Create a set of component names for fast lookup
+    const componentNames = new Set(components.map(c => c.name));
+    
+    // If pruning is enabled, filter out scenes for components that no longer exist
+    if (prune && existingScenes) {
+      const sceneIdsToRemove = [];
+      
+      // Identify scenes to remove
+      for (const [sceneId, sceneInfo] of Object.entries(allExistingScenes)) {
+        const { componentName } = sceneInfo;
+        
+        // Skip scenes we can't identify the component for - don't prune these
+        if (!componentName) {
+          console.log(`Preserving scene ${sceneId} (could not identify component)`);
+          continue;
+        }
+        
+        // If component no
