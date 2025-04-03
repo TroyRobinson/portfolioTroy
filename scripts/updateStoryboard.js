@@ -24,7 +24,7 @@ const AUTO_SIZE_COMPONENTS = true;
 
 // Vertical layout settings for components
 const VERTICAL_LAYOUT = true;
-const VERTICAL_SPACING = 120; // Doubled from 60 to 120 - Space between vertically stacked components
+const VERTICAL_SPACING = 220; // Doubled from 60 to 120 - Space between vertically stacked components
 const HORIZONTAL_COLUMN_SPACING = 936; // Distance between component columns (1148 - 212 = 936)
 const COMPONENT_COLUMN_TOP = 1584; // Starting top position for component columns
 const SUB_FOLDER_COLUMN_LEFT = 1148; // Left position for the first subfolder column (changed from 600)
@@ -763,7 +763,13 @@ function generateStoryboard(components, existingScenes = null) {
     
     // Add component rendering with proper props based on component name
     const componentName = component.name;
-    if (componentName === 'PageLayout') {
+    if (componentName === 'App') {
+      // Render AboutPage inside App to show realistic content
+      content += `      <${componentName}>\n`;
+      content += `        {/* The App uses Wouter Router, rendering AboutPage directly in storyboard */}\n`;
+      content += `        <AboutPage style={{}} />\n`;
+      content += `      </${componentName}>\n`;
+    } else if (componentName === 'PageLayout') {
       content += `      <${componentName} style={{}} title="Sample Title">\n`;
       content += `        <div>Sample content</div>\n`;
       content += `      </${componentName}>\n`;
@@ -775,6 +781,10 @@ function generateStoryboard(components, existingScenes = null) {
       content += `      </${componentName}>\n`;
     } else if (componentName === 'CaseStudyDetail') {
       content += `      <${componentName} slug="sample-case-study" />\n`;
+    } else if (componentName === 'Playground') {
+      content += `      <${componentName} style={{}}>\n`;
+      content += `        Playground Content\n`;
+      content += `      </${componentName}>\n`;
     } else if (component.hasStyleProp) {
       content += `      <${componentName} style={{}} />\n`;
     } else {

@@ -25,7 +25,10 @@ export var storyboard = (
       }}
       data-label='My App'
     >
-      <App />
+      <App>
+        {/* The App uses Wouter Router, rendering AboutPage directly in storyboard */}
+        <AboutPage style={{}} />
+      </App>
     </Scene>
     <Scene
       id='playground-scene'
@@ -39,7 +42,9 @@ export var storyboard = (
       }}
       data-label='Playground'
     >
-      <Playground style={{}} />
+      <Playground style={{}}>
+        Playground Content
+      </Playground>
     </Scene>
     <Scene
       id='aboutpage-scene'
@@ -119,7 +124,7 @@ export var storyboard = (
         height: 400,
         position: 'absolute',
         left: 212,
-        top: 1784,
+        top: 1884,
       }}
       data-label='PageLayout'
     >
@@ -135,7 +140,7 @@ export var storyboard = (
         height: 44,
         position: 'absolute',
         left: 212,
-        top: 2304,
+        top: 2504,
       }}
       data-label='Tag'
     >
