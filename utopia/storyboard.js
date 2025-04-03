@@ -25,10 +25,38 @@ export var storyboard = (
       }}
       data-label='My App'
     >
-      <App>
-        {/* The App uses Wouter Router, rendering AboutPage directly in storyboard */}
-        <AboutPage style={{}} />
-      </App>
+      <>
+        {/* Simplified App preview for storyboard */}
+        <div style={{ padding: '20px', height: '100%', overflow: 'auto' }}>
+          <div style={{ border: '1px dashed #ccc', padding: '15px', borderRadius: '4px', marginBottom: '15px' }}>
+            <h3 style={{ margin: '0 0 10px 0' }}>App Component</h3>
+            <p style={{ margin: '0 0 10px 0' }}>This component contains a Router with the following routes:</p>
+            <ul style={{ margin: '0', paddingLeft: '20px' }}>
+              <li>/ → AboutPage</li>
+              <li>/portfolio → PortfolioPage</li>
+              <li>/portfolio/:slug → CaseStudyDetail</li>
+              <li>/contact → ContactPage</li>
+            </ul>
+          </div>
+          {/* Preview of default route content */}
+          <div style={{ border: '1px solid #eee', borderRadius: '4px', padding: '15px' }}>
+            <h4 style={{ margin: '0 0 10px 0' }}>Preview of default route</h4>
+            <div style={{ padding: '20px', background: '#f9f9f9', borderRadius: '4px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
+                <div style={{ padding: '10px 15px', background: '#e9e9e9', borderRadius: '4px', fontSize: '14px' }}>
+                  Router content will be displayed here
+                </div>
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                  <div style={{ padding: '8px 12px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '12px' }}>AboutPage</div>
+                  <div style={{ padding: '8px 12px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '12px' }}>PortfolioPage</div>
+                  <div style={{ padding: '8px 12px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '12px' }}>CaseStudyDetail</div>
+                  <div style={{ padding: '8px 12px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '12px' }}>ContactPage</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
     </Scene>
     <Scene
       id='playground-scene'

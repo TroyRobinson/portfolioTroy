@@ -764,15 +764,39 @@ function generateStoryboard(components, existingScenes = null) {
     // Add component rendering with proper props based on component name
     const componentName = component.name;
     if (componentName === 'App') {
-      // Special handling for App component to show content in storyboard
-      content += `      <${componentName}>\n`;
-      content += `        {/* The App uses a Router, so we're forcing content display here */}\n`;
-      content += `        <div style={{ padding: '20px' }}>\n`;
-      content += `          <h1>Portfolio App</h1>\n`;
-      content += `          <p>This is a preview of the App component.</p>\n`;
-      content += `          <p>In the actual app, this would render the current route.</p>\n`;
+      // Create a more flexible placeholder that mimics the App structure without router dependencies
+      content += `      <>\n`;
+      content += `        {/* Simplified App preview for storyboard */}\n`;
+      content += `        <div style={{ padding: '20px', height: '100%', overflow: 'auto' }}>\n`;
+      content += `          <div style={{ border: '1px dashed #ccc', padding: '15px', borderRadius: '4px', marginBottom: '15px' }}>\n`;
+      content += `            <h3 style={{ margin: '0 0 10px 0' }}>App Component</h3>\n`;
+      content += `            <p style={{ margin: '0 0 10px 0' }}>This component contains a Router with the following routes:</p>\n`;
+      content += `            <ul style={{ margin: '0', paddingLeft: '20px' }}>\n`;
+      content += `              <li>/ → AboutPage</li>\n`;
+      content += `              <li>/portfolio → PortfolioPage</li>\n`;
+      content += `              <li>/portfolio/:slug → CaseStudyDetail</li>\n`;
+      content += `              <li>/contact → ContactPage</li>\n`;
+      content += `            </ul>\n`;
+      content += `          </div>\n`;
+      content += `          {/* Preview of default route content */}\n`;
+      content += `          <div style={{ border: '1px solid #eee', borderRadius: '4px', padding: '15px' }}>\n`;
+      content += `            <h4 style={{ margin: '0 0 10px 0' }}>Preview of default route</h4>\n`;
+      content += `            <div style={{ padding: '20px', background: '#f9f9f9', borderRadius: '4px' }}>\n`;
+      content += `              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>\n`;
+      content += `                <div style={{ padding: '10px 15px', background: '#e9e9e9', borderRadius: '4px', fontSize: '14px' }}>\n`;
+      content += `                  Router content will be displayed here\n`;
+      content += `                </div>\n`;
+      content += `                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center' }}>\n`;
+      content += `                  <div style={{ padding: '8px 12px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '12px' }}>AboutPage</div>\n`;
+      content += `                  <div style={{ padding: '8px 12px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '12px' }}>PortfolioPage</div>\n`;
+      content += `                  <div style={{ padding: '8px 12px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '12px' }}>CaseStudyDetail</div>\n`;
+      content += `                  <div style={{ padding: '8px 12px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '12px' }}>ContactPage</div>\n`;
+      content += `                </div>\n`;
+      content += `              </div>\n`;
+      content += `            </div>\n`;
+      content += `          </div>\n`;
       content += `        </div>\n`;
-      content += `      </${componentName}>\n`;
+      content += `      </>\n`;
     } else if (componentName === 'PageLayout') {
       content += `      <${componentName} style={{}} title="Sample Title">\n`;
       content += `        <div>Sample content</div>\n`;
