@@ -4,10 +4,8 @@ import App from '../src/app'
 import Navigation from '../src/components/Navigation'
 import { PageLayout } from '../src/components/PageLayout'
 import { Tag } from '../src/components/Tag'
-import { Button } from '../src/components/UI/Button'
 import AboutPage from '../src/pages/AboutPage'
 import CaseStudyDetail from '../src/pages/CaseStudyDetail'
-import ContactPage from '../src/pages/ContactPage'
 import PortfolioPage from '../src/pages/PortfolioPage'
 import { Playground } from '../src/playground'
 
@@ -55,7 +53,6 @@ export var storyboard = (
               <li>/ → AboutPage</li>
               <li>/portfolio → PortfolioPage</li>
               <li>/portfolio/:slug → CaseStudyDetail</li>
-              <li>/contact → ContactPage</li>
             </ul>
           </div>
         </div>
@@ -106,22 +103,6 @@ export var storyboard = (
       <Tag>Tag label</Tag>
     </Scene>
     <Scene
-      id='button-scene'
-      commentId='button-scene'
-      style={{
-        width: 120,
-        height: 40,
-        position: 'absolute',
-        left: 1148,
-        top: 1584,
-      }}
-      data-label='Button (UI)'
-    >
-      <Button style={{}} onClick={() => {}}>
-        Click Me
-      </Button>
-    </Scene>
-    <Scene
       id='aboutpage-scene'
       commentId='aboutpage-scene'
       style={{
@@ -148,20 +129,6 @@ export var storyboard = (
       data-label='CaseStudyDetail'
     >
       <CaseStudyDetail slug='sample-case-study' />
-    </Scene>
-    <Scene
-      id='contactpage-scene'
-      commentId='contactpage-scene'
-      style={{
-        width: 700,
-        height: 700,
-        position: 'absolute',
-        left: 2644,
-        top: 128,
-      }}
-      data-label='ContactPage'
-    >
-      <ContactPage style={{}} />
     </Scene>
     <Scene
       id='portfoliopage-scene'

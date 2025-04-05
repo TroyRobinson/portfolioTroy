@@ -28,7 +28,6 @@ npm run preview
 
 - **Frontend Framework**: React 18 with modern hooks and patterns
 - **Routing**: Lightweight [wouter](https://github.com/molefrog/wouter) for client-side routing
-- **UI Components**: [Radix UI](https://www.radix-ui.com/) for accessible, composable components
 - **Styling**: Efficient inline CSS with style object consolidation
 - **Animations**: [react-spring](https://www.react-spring.dev/) for physics-based animations
 - **Data Layer**: [InstantDB](https://instantdb.com/) loaded via [ESM.sh](https://esm.sh/) for dynamic imports
@@ -50,7 +49,6 @@ npm run preview
   - Component memoization with TypeScript compatibility
   - Skeleton UI for content loading states
   - Tab visibility tracking for background data prefetching
-- **Accessibility**: Fully accessible components using Radix UI primitives
 - **Component Structure**: Organized into reusable, modular components in a logical hierarchy
 
 ## Auto-Storyboard System

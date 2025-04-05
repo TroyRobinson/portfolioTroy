@@ -1,5 +1,4 @@
 import React from 'react';
-import * as Avatar from '@radix-ui/react-avatar';
 import { FlexCol, FlexRow } from '../utils.jsx';
 import Navigation from './Navigation.jsx';
 
@@ -38,7 +37,7 @@ export const PageLayout = ({ children, title = 'Welcome', style }) => {
           <p style={{ fontSize: '1.2rem', color: '#666' }}>Web Developer & Designer</p>
         </FlexCol>
         
-        <Avatar.Root style={{
+        <div style={{
           display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -48,22 +47,13 @@ export const PageLayout = ({ children, title = 'Welcome', style }) => {
           width: 100,
           height: 100,
           borderRadius: '100%',
-          backgroundColor: 'black'
+          backgroundColor: 'rgb(43, 108, 176)',
+          color: 'white',
+          fontSize: '2.5rem',
+          fontWeight: 'bold'
         }}>
-          <Avatar.Fallback style={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'rgb(43, 108, 176)',
-            color: 'white',
-            fontSize: '2.5rem',
-            fontWeight: 'bold'
-          }}>
-            MP
-          </Avatar.Fallback>
-        </Avatar.Root>
+          MP
+        </div>
       </FlexRow>
       
       <div style={{ height: '1px', backgroundColor: '#e0e0e0', margin: '0 0 20px 0', width: '100%' }} />

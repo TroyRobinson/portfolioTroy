@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Router, Route, Switch } from './Router.jsx';
 import AboutPage from './pages/AboutPage.jsx';
 import PortfolioPage from './pages/PortfolioPage.jsx';
-import ContactPage from './pages/ContactPage.jsx';
 import CaseStudyDetail from './pages/CaseStudyDetail.jsx';
 
 /**
@@ -72,7 +71,6 @@ const AppContent = () => {
       <Route path="/portfolio/:slug">
         {params => <CaseStudyDetail slug={params.slug} />}
       </Route>
-      <Route path="/contact" component={ContactPage} />
     </Switch>
   );
 };

@@ -34,10 +34,6 @@ const Navigation = ({ style }) => {
       <Link href="/portfolio" style={getActiveStyle('/portfolio')}>
         Case Studies
       </Link>
-      
-      <Link href="/contact" style={getActiveStyle('/contact')}>
-        Contact
-      </Link>
     </FlexRow>
   );
 };
