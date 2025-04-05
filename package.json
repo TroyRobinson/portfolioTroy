@@ -15,9 +15,7 @@
     "dev": "concurrently \"npm run watch-storyboard\" \"npm run start\"",
     "dev:verbose": "concurrently \"npm run watch-storyboard:verbose\" \"npm run start\"",
     "build": "npm run update-storyboard && vite build",
-    "preview": "vite preview",
-    "prepare": "husky install && node scripts/setupHooks.js",
-    "postinstall": "node scripts/setupHooks.js"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",
@@ -38,7 +36,6 @@
     "@vitejs/plugin-react": "^4.2.0",
     "chokidar-cli": "^3.0.0",
     "concurrently": "^8.2.2",
-    "husky": "^8.0.3",
     "vite": "^5.0.0"
   }
 }

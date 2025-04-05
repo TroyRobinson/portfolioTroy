@@ -1,0 +1,14 @@
+---
+description: When styling elements, using/updating themes, or building components or screens.
+globs: 
+alwaysApply: false
+---
+# Styling elements or components
+- Use inline style props e.g. style={{...}} for stying. No styles via other props, CSS in the top of the file, or CSS files (except for global below).
+
+# Theme 
+- Generally develop the theme of the app via component primatives (see below)
+- Only use the global CSS file and variables for default font, brand accent color, and completely global styles.
+- Size & spacing in 8px increments
+
+# 
